@@ -8,6 +8,7 @@ const { MONGODB } = require("./config.js");
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  context: ({ req }) => ({ req }),
 });
 
 mongoose
@@ -17,5 +18,5 @@ mongoose
     return server.listen({ port: 5000 });
   })
   .then((res) => {
-    console.log(`server is running ${res.url}`);
+    console.log(`Server running at ${res.url}`);
   });
