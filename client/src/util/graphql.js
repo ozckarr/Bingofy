@@ -21,3 +21,22 @@ export const FETCH_POSTS_QUERY = gql`
     }
   }
 `;
+
+export const FETCH_BINGOS_QUERY = gql`
+  {
+    getBingos {
+      id
+      title
+      description
+      createdAt
+      username
+      bingoBrick {
+        id
+        placement
+        title
+        summery
+        checked
+      }
+    }
+  }
+`;
