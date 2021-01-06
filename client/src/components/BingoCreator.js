@@ -4,18 +4,28 @@ import gql from "graphql-tag";
 import { useMutation } from "@apollo/client";
 
 import { useForm } from "../util/hooks";
+import { useHistory } from "react-router-dom";
 
 function BingoCreator() {
   const { values, onChange, onSubmit } = useForm(createBingoCallback, {
     title: "",
     description: "",
+    redirect: false,
   });
+
+  let history = useHistory();
 
   const [createBingo, { error }] = useMutation(CREATE_BINGO_MUTATION, {
     variables: values,
     update(proxy, result) {
       values.title = "";
       values.description = "";
+      values.redirect = false;
+    },
+    onCompleted({ createBingo: data, createBingo: { id } }) {
+      console.log(data);
+
+      history.push(`/bingos/${id}`);
     },
     onError(err) {
       console.log(err);

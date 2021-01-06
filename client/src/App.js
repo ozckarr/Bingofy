@@ -13,6 +13,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import SinglePost from "./pages/SinglePost";
+import BingoView from "./pages/BingoView";
 import AddBingo from "./pages/AddBingo";
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
           <AuthRoute exact path="/register" component={Register} />
           <AuthRouteLoggedIn exact path="/addBingo" component={AddBingo} />
           <Route exact path="/posts/:postId" component={SinglePost} />
+          <Route exact path="/bingos/:bingoId" component={BingoView} />
         </Container>
       </Router>
     </AuthProvider>
