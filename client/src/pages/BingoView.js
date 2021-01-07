@@ -1,184 +1,143 @@
-import React, { useContext, useState, useRef } from "react";
+import React, { useContext, useState } from "react";
 import gql from "graphql-tag";
 import { useQuery, useMutation } from "@apollo/client";
-import moment from "moment";
-import {
-  Button,
-  Card,
-  Grid,
-  Image,
-  Icon,
-  Label,
-  Form,
-} from "semantic-ui-react";
+import { Button, Card, Form, Container, Loader } from "semantic-ui-react";
 
 import { AuthContext } from "../context/auth";
-import LikeButton from "../components/LikeButton";
-import DeleteButton from "../components/DeleteButton";
-import MyPopup from "../util/MyPopup";
+//import DeleteButton from "../components/DeleteButton";
+import { Redirect } from "react-router-dom";
 
 function SingleBingo(props) {
-  console.log(props);
-  /*
+  const bingoId = props.match.params.bingoId;
+  const [title, setTitle] = useState("");
+  const [summery, setSummery] = useState("");
+
   const { user } = useContext(AuthContext);
 
-  const commentInputRef = useRef(null);
-
-  const [comment, setComment] = useState("");
-
-  const { loading, data } = useQuery(FETCH_POST_QUERY, {
+  const { loading, data } = useQuery(FETCH_BINGO_QUERY, {
     variables: {
-      postId,
+      bingoId,
     },
   });
-  const [submitComment] = useMutation(SUBMIT_COMMENT_MUTATION, {
+
+  const [submitBox] = useMutation(SUBMIT_BINGOBOX_MUTATION, {
     update() {
-      setComment("");
-      commentInputRef.current.blur();
+      setTitle("");
+      setSummery("");
+      document.querySelector(".bingoBoxCreator").focus();
     },
     variables: {
-      postId,
-      body: comment,
+      bingoId,
+      title: title,
+      summery: summery,
+    },
+    onError(err) {
+      console.log(err);
     },
   });
-  function deletePostCallback() {
-    props.history.push("/");
-  }
 
-  let postMarkup;
-  if (loading) {
-    postMarkup = <p>Loading...</p>;
+  let bingoMarkup;
+  if (!user) {
+    bingoMarkup = <Redirect to="/" />;
   } else {
-    const {
-      id,
-      body,
-      createdAt,
-      username,
-      comments,
-      likes,
-      likeCount,
-      commentCount,
-    } = data.getPost;
-
-    postMarkup = (
-      <Grid>
-        <Grid.Row>
-          <Grid.Column width={2}>
-            <Image
-              src="https://react.semantic-ui.com/images/avatar/large/molly.png"
-              size="small"
-              float="right"
-            />
-          </Grid.Column>
-          <Grid.Column width={10}>
+    if (loading) {
+      bingoMarkup = <Loader />;
+    } else {
+      const { title, username, bingoBoxes } = data.getBingo;
+      if (username === user.username) {
+        bingoMarkup = (
+          <Container>
             <Card fluid>
               <Card.Content>
-                <Card.Header>{username}</Card.Header>
-                <Card.Meta>{moment(createdAt).fromNow()}</Card.Meta>
-                <Card.Description>{body}</Card.Description>
+                <Card.Header>
+                  <h3>{title}</h3>
+                </Card.Header>
+                <Card.Meta>
+                  <p>
+                    Lägg till 25 brickor. Titeln är det som kommer att synas på
+                    bingobrickan. Summeringen kan ge en länge beskrivning.
+                  </p>
+                </Card.Meta>
               </Card.Content>
-              <hr />
-              <Card.Content extra>
-                <LikeButton user={user} post={{ id, likeCount, likes }} />
-                <MyPopup content="Comment">
-                  <Button
-                    as="div"
-                    labelPosition="right"
-                    onClick={() => console.log("Comment on post")}
-                  >
-                    <Button basic color="blue">
-                      <Icon name="comments" />
-                    </Button>
-                    <Label basic color="blue" pointing="left">
-                      {commentCount}
-                    </Label>
-                  </Button>
-                </MyPopup>
-                {user && user.username === username && (
-                  <DeleteButton postId={id} callback={deletePostCallback} />
-                )}
-              </Card.Content>
-            </Card>
-            {user && (
               <Card fluid>
                 <Card.Content>
-                  <p>Post a Comment</p>
                   <Form>
-                    <div className="ui action input fluid">
-                      <input
-                        type="text"
-                        placeholder="comment..."
-                        name={comment}
-                        onChange={(event) => setComment(event.target.value)}
-                        ref={commentInputRef}
-                      />
-                      <button
-                        type="submit"
-                        className="ui button teal"
-                        disabled={comment.trim() === ""}
-                        onClick={submitComment}
-                      >
-                        Submit
-                      </button>
-                    </div>
+                    <Form.Input
+                      type="text"
+                      placeholder="Titel"
+                      name={title}
+                      value=""
+                      onChange={(event) => setTitle(event.target.value)}
+                    />
+                    <Form.TextArea
+                      type="text"
+                      placeholder="Summering"
+                      name={title}
+                      value=""
+                      onChange={(event) => setSummery(event.target.value)}
+                    />
+                    {/*TODO go back when 25> */}
+                    <p>{25 - bingoBoxes.length} Boxar kvar</p>
+
+                    <Button
+                      type="submit"
+                      icon="add"
+                      color="orange"
+                      disabled={title.trim() === ""}
+                      onClick={submitBox}
+                      circular
+                    />
                   </Form>
                 </Card.Content>
               </Card>
-            )}
-            {comments.map((comment) => (
-              <Card fluid key={comment.id}>
-                <Card.Content>
-                  {user && user.username === comment.username && (
-                    <DeleteButton postId={id} commentId={comment.id} />
-                  )}
-                  <Card.Header>{comments.username}</Card.Header>
-                  <Card.Meta>{moment(comment.createdAt).fromNow()}</Card.Meta>
-                  <Card.Description>{comment.body}</Card.Description>
+              {bingoBoxes.map((bingoBox) => (
+                <Card.Content
+                  key={bingoBox.id}
+                  style={{ display: "flex", flexDirection: "row" }}
+                >
+                  <div className="bingoBox">
+                    <div className="bingoBoxContent">{bingoBox.title}</div>
+                  </div>
+                  <p style={{ marginLeft: "1em" }}>{bingoBox.summery}</p>
                 </Card.Content>
-              </Card>
-            ))}
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
-    );
+              ))}
+            </Card>
+          </Container>
+        );
+      }
+    }
   }
-  return postMarkup;
-  */
-  return <h1>korv</h1>;
+
+  return bingoMarkup;
 }
 
-const SUBMIT_COMMENT_MUTATION = gql`
-  mutation($postId: String!, $body: String!) {
-    createComment(postId: $postId, body: $body) {
+const SUBMIT_BINGOBOX_MUTATION = gql`
+  mutation($bingoId: String!, $title: String!, $summery: String) {
+    createBingoBox(bingoId: $bingoId, title: $title, summery: $summery) {
       id
-      comments {
+      bingoBoxes {
         id
-        body
-        createdAt
-        username
+        title
+        summery
+        checked
       }
-      commentCount
     }
   }
 `;
 
-const FETCH_POST_QUERY = gql`
-  query($postId: ID!) {
-    getPost(postId: $postId) {
+const FETCH_BINGO_QUERY = gql`
+  query($bingoId: ID!) {
+    getBingo(bingoId: $bingoId) {
       id
-      body
+      title
+      description
       createdAt
       username
-      likeCount
-      likes {
-        username
-      }
-      commentCount
-      comments {
+      bingoBoxes {
         id
-        username
-        createdAt
-        body
+        title
+        summery
+        checked
       }
     }
   }

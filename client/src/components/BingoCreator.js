@@ -10,7 +10,6 @@ function BingoCreator() {
   const { values, onChange, onSubmit } = useForm(createBingoCallback, {
     title: "",
     description: "",
-    redirect: false,
   });
 
   let history = useHistory();
@@ -20,11 +19,8 @@ function BingoCreator() {
     update(proxy, result) {
       values.title = "";
       values.description = "";
-      values.redirect = false;
     },
-    onCompleted({ createBingo: data, createBingo: { id } }) {
-      console.log(data);
-
+    onCompleted({ createBingo: { id } }) {
       history.push(`/bingos/${id}`);
     },
     onError(err) {
@@ -59,7 +55,7 @@ function BingoCreator() {
           />
           <hr />
           <Button type="submit" color="orange">
-            Submit
+            Skapa Bingo
           </Button>
         </Form.Field>
       </Form>
@@ -82,9 +78,8 @@ const CREATE_BINGO_MUTATION = gql`
       description
       createdAt
       username
-      bingoBrick {
+      bingoBoxes {
         id
-        placement
         title
         summery
         checked

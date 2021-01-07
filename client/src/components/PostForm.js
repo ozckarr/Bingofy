@@ -17,7 +17,7 @@ function PostForm() {
       values.body = "";
     },
     onError(err) {
-      //console.log(err)
+      console.log(err);
     },
     refetchQueries: [{ query: FETCH_POSTS_QUERY }],
   });

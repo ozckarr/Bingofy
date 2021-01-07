@@ -30,9 +30,8 @@ export const FETCH_BINGOS_QUERY = gql`
       description
       createdAt
       username
-      bingoBrick {
+      bingoBoxes {
         id
-        placement
         title
         summery
         checked

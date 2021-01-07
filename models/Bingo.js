@@ -5,9 +5,8 @@ const bingoSchema = new Schema({
   description: String,
   createdAt: String,
   username: String,
-  bingoBrick: [
+  bingoBoxes: [
     {
-      placement: String,
       title: String,
       summery: String,
       checked: Boolean,

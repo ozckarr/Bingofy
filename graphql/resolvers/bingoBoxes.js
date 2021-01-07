@@ -5,11 +5,11 @@ const Bingo = require("../../models/Bingo");
 
 module.exports = {
   Mutation: {
-    createBingoBrick: async (_, { bingoId, placement, title, summery }) => {
-      if (body.trim() === "") {
+    createBingoBox: async (_, { bingoId, title, summery }) => {
+      if (title.trim() === "") {
         throw new UserInputError("Behöver en titel", {
           errors: {
-            body: "Bingo Brick can't be empty",
+            title: "Bingo Box can't be empty",
           },
         });
       }
@@ -17,8 +17,7 @@ module.exports = {
       const bingo = await Bingo.findById(bingoId);
 
       if (bingo) {
-        bingo.bingoBrick.unshift({
-          placement,
+        bingo.bingoBoxes.unshift({
           title,
           summery,
           checked: false,

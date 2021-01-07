@@ -7,11 +7,10 @@ module.exports = gql`
     description: String!
     createdAt: String!
     username: String!
-    bingoBrick: [BingoBrick]!
+    bingoBoxes: [BingoBoxes]!
   }
-  type BingoBrick {
+  type BingoBoxes {
     id: ID!
-    placement: String!
     title: String!
     summery: String
     checked: Boolean!
@@ -63,12 +62,7 @@ module.exports = gql`
     deletePost(postId: ID!): String!
     createBingo(title: String!, description: String): Bingo!
     deleteBingo(bingoId: ID!): String!
-    createBingoBrick(
-      bingoId: String!
-      placement: String!
-      title: String!
-      summery: String!
-    ): Bingo!
+    createBingoBox(bingoId: String!, title: String!, summery: String): Bingo!
     createComment(postId: String!, body: String!): Post!
     deleteComment(postId: ID!, commentId: ID!): Post!
     likePost(postId: ID!): Post!
