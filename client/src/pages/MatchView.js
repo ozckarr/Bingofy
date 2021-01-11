@@ -4,6 +4,7 @@ import { useQuery, useMutation } from "@apollo/client";
 import { Card, Container, Loader } from "semantic-ui-react";
 
 import { AuthContext } from "../context/auth";
+import rearrangeBingoBoxes from "../util/rearrangeBingoBoxes";
 
 import { Redirect } from "react-router-dom";
 import BingoBoxContent from "../components/BingoBoxContent";
@@ -55,17 +56,18 @@ function MatchView(props) {
       bingoMarkup = <Loader />;
     } else {
       const { title, bingoBoxes } = data.getBingo;
+      const reOrderedBingoBoxes = rearrangeBingoBoxes(bingoBoxes);
       bingoMarkup = (
         <Container>
           <Card fluid>
             <Card.Content>
-              <VictoryCheck bingoBoxes={bingoBoxes} />
+              <VictoryCheck bingoBoxes={reOrderedBingoBoxes} />
               <Card.Header>
                 <h3>{title}</h3>
               </Card.Header>
             </Card.Content>
             <div className="bingoContainer">
-              {bingoBoxes.map((bingoBox) => (
+              {reOrderedBingoBoxes.map((bingoBox) => (
                 <div
                   onClick={() => handleBoxClick(bingoBox)}
                   className={

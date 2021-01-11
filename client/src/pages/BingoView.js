@@ -22,7 +22,7 @@ function BingoView(props) {
     },
   });
 
-  //TODO: useForm
+  //TODO: useForm / reset when submit
   const [submitBox] = useMutation(SUBMIT_BINGOBOX_MUTATION, {
     update() {
       setTitle("");
