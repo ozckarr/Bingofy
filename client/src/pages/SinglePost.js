@@ -38,6 +38,7 @@ function SinglePost(props) {
       body: comment,
     },
   });
+
   function deletePostCallback() {
     props.history.push("/");
   }
