@@ -15,6 +15,7 @@ import Register from "./pages/Register";
 import SinglePost from "./pages/SinglePost";
 import BingoView from "./pages/BingoView";
 import AddBingo from "./pages/AddBingo";
+import MatchView from "./pages/MatchView";
 
 function App() {
   return (
@@ -26,6 +27,12 @@ function App() {
           <AuthRoute exact path="/login" component={Login} />
           <AuthRoute exact path="/register" component={Register} />
           <AuthRouteLoggedIn exact path="/addBingo" component={AddBingo} />
+          {/*Change to player-token-allow not AuthRouteLoggedIn */}
+          <AuthRouteLoggedIn
+            exact
+            path="/match/:bingoId"
+            component={MatchView}
+          />
           <Route exact path="/posts/:postId" component={SinglePost} />
           <Route exact path="/bingos/:bingoId" component={BingoView} />
         </Container>

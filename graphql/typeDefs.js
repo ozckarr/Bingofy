@@ -64,6 +64,7 @@ module.exports = gql`
     deleteBingo(bingoId: ID!): String!
     createBingoBox(bingoId: String!, title: String!, summery: String): Bingo!
     createComment(postId: String!, body: String!): Post!
+    checkBingoBox(bingoId: String!, bingoBoxId: String!): Bingo!
     deleteComment(postId: ID!, commentId: ID!): Post!
     likePost(postId: ID!): Post!
   }

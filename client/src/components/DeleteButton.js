@@ -1,68 +1,46 @@
 import React, { useState } from "react";
 import gql from "graphql-tag";
 import { useMutation } from "@apollo/client";
-import { Button, Confirm, Icon } from "semantic-ui-react";
+import { Button, Confirm } from "semantic-ui-react";
 
-import { FETCH_POSTS_QUERY } from "../util/graphql";
-import MyPopup from "../util/MyPopup";
+import { FETCH_BINGOS_QUERY } from "../util/graphql";
 
-function DeleteButton({ postId, commentId, callback }) {
+function DeleteButton({ bingoId, callback }) {
   const [confirmOpen, setConfirmOpen] = useState(false);
 
-  const mutation = commentId ? DELETE_COMMENT_MUTATION : DELETE_POST_MUTATION;
-  const [deletePostOrMutation] = useMutation(mutation, {
-    refetchQueries: [{ query: FETCH_POSTS_QUERY }],
+  const [deleteBingo] = useMutation(DELETE_BINGO_MUTATION, {
+    refetchQueries: [{ query: FETCH_BINGOS_QUERY }],
 
     update(proxy) {
       setConfirmOpen(false);
+
       if (callback) callback();
     },
-
     variables: {
-      postId,
-      commentId,
+      bingoId,
     },
   });
-
   return (
     <>
-      <MyPopup content={commentId ? "Delete Comment" : "Delete Post"}>
-        <Button
-          as="div"
-          color="red"
-          floated="right"
-          onClick={() => setConfirmOpen(true)}
-        >
-          <Icon name="trash" style={{ margin: 0 }} />
-        </Button>
-      </MyPopup>
+      <Button
+        as="div"
+        color="orange"
+        onClick={() => setConfirmOpen(true)}
+        circular
+        icon="trash"
+      />
       <Confirm
         open={confirmOpen}
         onCancel={() => setConfirmOpen(false)}
-        onConfirm={deletePostOrMutation}
+        onConfirm={deleteBingo}
       />
     </>
   );
 }
 
-const DELETE_POST_MUTATION = gql`
-  mutation deletePost($postId: ID!) {
-    deletePost(postId: $postId)
-  }
-`;
-
-const DELETE_COMMENT_MUTATION = gql`
-  mutation deleteComment($postId: ID!, $commentId: ID!) {
-    deleteComment(postId: $postId, commentId: $commentId) {
-      id
-      comments {
-        id
-        username
-        createdAt
-        body
-      }
-      commentCount
-    }
+const DELETE_BINGO_MUTATION = gql`
+  mutation deleteBingo($bingoId: ID!) {
+    deleteBingo(bingoId: $bingoId)
   }
 `;
 

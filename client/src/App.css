@@ -10,12 +10,19 @@
   margin: auto;
 }
 
+.bingoContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
 .bingoBox {
-  width: 7em;
+  width: 20%;
   outline: 0.1em solid black;
   text-align: center;
   position: relative;
   height: 7em;
+  word-break: break-all;
 }
 
 .bingoBoxContent {

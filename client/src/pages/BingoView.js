@@ -5,12 +5,14 @@ import { Button, Card, Form, Container, Loader } from "semantic-ui-react";
 
 import { AuthContext } from "../context/auth";
 //import DeleteButton from "../components/DeleteButton";
+
 import { Redirect } from "react-router-dom";
 
-function SingleBingo(props) {
+function BingoView(props) {
   const bingoId = props.match.params.bingoId;
   const [title, setTitle] = useState("");
   const [summery, setSummery] = useState("");
+  const [errors, setErrors] = useState({});
 
   const { user } = useContext(AuthContext);
 
@@ -24,7 +26,6 @@ function SingleBingo(props) {
     update() {
       setTitle("");
       setSummery("");
-      document.querySelector(".bingoBoxCreator").focus();
     },
     variables: {
       bingoId,
@@ -32,7 +33,7 @@ function SingleBingo(props) {
       summery: summery,
     },
     onError(err) {
-      console.log(err);
+      setErrors(err.graphQLErrors[0].extensions.exception.errors);
     },
   });
 
@@ -62,18 +63,18 @@ function SingleBingo(props) {
               <Card fluid>
                 <Card.Content>
                   <Form>
+                    {/*TODO reset when new> */}
                     <Form.Input
                       type="text"
                       placeholder="Titel"
                       name={title}
-                      value=""
+                      error={errors.title ? true : false}
                       onChange={(event) => setTitle(event.target.value)}
                     />
                     <Form.TextArea
                       type="text"
                       placeholder="Summering"
                       name={title}
-                      value=""
                       onChange={(event) => setSummery(event.target.value)}
                     />
                     {/*TODO go back when 25> */}
@@ -143,4 +144,4 @@ const FETCH_BINGO_QUERY = gql`
   }
 `;
 
-export default SingleBingo;
+export default BingoView;

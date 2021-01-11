@@ -1,43 +1,72 @@
 import React, { useContext } from "react";
 import { useQuery } from "@apollo/client";
-import { Grid, Transition } from "semantic-ui-react";
+import { Link } from "react-router-dom";
+import {
+  Container,
+  Grid,
+  Loader,
+  Button,
+  Card,
+  Transition,
+} from "semantic-ui-react";
 
+import DeleteButton from "../components/DeleteButton";
 import { AuthContext } from "../context/auth";
-import PostCard from "../components/PostCard";
-import PostForm from "../components/PostForm";
-import { FETCH_POSTS_QUERY } from "../util/graphql";
+import { FETCH_BINGOS_QUERY } from "../util/graphql";
 
 function Home() {
   const { user } = useContext(AuthContext);
-  const { loading, data: { getPosts: posts } = {} } = useQuery(
-    FETCH_POSTS_QUERY
+
+  const { loading, data: { getBingos: bingos } = {} } = useQuery(
+    FETCH_BINGOS_QUERY
   );
+  /*TODO Re-Fetch when returning*/
 
   return (
-    <Grid columns={3}>
-      <Grid.Row className="page-title">
-        <h1>Recent Posts</h1>
-      </Grid.Row>
-      <Grid.Row>
-        {user && (
-          <Grid.Column>
-            <PostForm />
-          </Grid.Column>
-        )}
-        {loading ? (
-          <h1>Loading posts..</h1>
-        ) : (
-          <Transition.Group>
-            {posts &&
-              posts.map((post) => (
-                <Grid.Column key={post.id} style={{ marginBottom: 20 }}>
-                  <PostCard post={post} />
-                </Grid.Column>
-              ))}
-          </Transition.Group>
-        )}
-      </Grid.Row>
-    </Grid>
+    <Container>
+      {loading ? (
+        <Loader />
+      ) : user ? (
+        <Transition.Group>
+          {/*TODO nonloggedin welcome screen */}
+          {bingos &&
+            bingos.map((bingo) => (
+              <Grid.Column key={bingo.id} style={{ marginBottom: "1em" }}>
+                <Card fluid>
+                  <Card.Content>
+                    <Card.Header>{bingo.title}</Card.Header>
+                    {user.username === bingo.username && (
+                      <>
+                        <Button
+                          circular
+                          color="orange"
+                          icon="edit"
+                          as={Link}
+                          to={`/bingos/${bingo.id}`}
+                        />
+                        <DeleteButton bingoId={bingo.id} />
+                      </>
+                    )}
+                    {bingo.bingoBoxes.length <= 24 ? (
+                      <p>Inte klar...</p>
+                    ) : (
+                      <Button
+                        circular
+                        color="orange"
+                        icon="play"
+                        as={Link}
+                        to={`/match/${bingo.id}`}
+                      />
+                    )}
+                  </Card.Content>
+                </Card>
+              </Grid.Column>
+            ))}
+        </Transition.Group>
+      ) : (
+        <p>logga in...</p>
+      )}
+    </Container>
   );
 }
 

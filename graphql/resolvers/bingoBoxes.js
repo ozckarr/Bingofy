@@ -26,5 +26,18 @@ module.exports = {
         return bingo;
       } else throw new UserInputError("Kunde inte hitta bingot");
     },
+    checkBingoBox: async (_, { bingoId, bingoBoxId }) => {
+      const bingo = await Bingo.findById(bingoId);
+
+      if (bingo) {
+        const index = bingo.bingoBoxes.findIndex((b) => b.id === bingoBoxId);
+
+        //Toggles the check/unchecked box
+        bingo.bingoBoxes[index].checked = !bingo.bingoBoxes[index].checked;
+        await bingo.save();
+
+        return bingo;
+      }
+    },
   },
 };
