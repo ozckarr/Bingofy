@@ -31,7 +31,7 @@ module.exports = {
       const user = checkAuth(context);
 
       if (title.trim() === "") {
-        throw new Error("Bingo can't be empty");
+        throw new UserInputError("Ingen titel", { errors });
       }
 
       const newBingo = new Bingo({

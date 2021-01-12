@@ -49,11 +49,31 @@ module.exports = gql`
     confirmPassword: String!
     email: String!
   }
+  type Match {
+    id: ID!
+    gameCode: String!
+    bingoId: String!
+    createdAt: String!
+    username: String!
+    player: [Player]
+  }
+  type Player {
+    id: ID!
+    nick: String!
+    finishedAt: String
+    boxOrder: [BoxOrder]
+  }
+  type BoxOrder {
+    placement: String
+    checked: Boolean
+  }
   type Query {
     getPosts: [Post]
     getPost(postId: ID!): Post
     getBingos: [Bingo]
     getBingo(bingoId: ID!): Bingo
+    getMatches: [Match]
+    getMatch(matchId: ID!): Match
   }
   type Mutation {
     register(registerInput: RegisterInput): User!
@@ -67,5 +87,6 @@ module.exports = gql`
     checkBingoBox(bingoId: String!, bingoBoxId: String!): Bingo!
     deleteComment(postId: ID!, commentId: ID!): Post!
     likePost(postId: ID!): Post!
+    createMatch(bingoId: String!): Match!
   }
 `;
