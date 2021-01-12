@@ -4,6 +4,7 @@ const commentsResolvers = require("./comments");
 const bingosResolvers = require("./bingos");
 const bingoBoxResolver = require("./bingoBoxes");
 const matchesResolver = require("./matches");
+const playersResolver = require("./players");
 
 module.exports = {
   Post: {
@@ -22,5 +23,6 @@ module.exports = {
     ...bingosResolvers.Mutation,
     ...bingoBoxResolver.Mutation,
     ...matchesResolver.Mutation,
+    ...playersResolver.Mutation,
   },
 };

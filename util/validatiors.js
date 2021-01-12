@@ -1,3 +1,5 @@
+//create validate for bingoboxes
+
 module.exports.validateRegisterInput = (
   username,
   email,
@@ -20,6 +22,24 @@ module.exports.validateRegisterInput = (
     errors.password = "Password must not empty";
   } else if (password !== confirmPassword) {
     errors.confirmPassword = "Passwords must match";
+  }
+
+  return {
+    errors,
+    valid: Object.keys(errors).length < 1,
+  };
+};
+
+module.exports.validatePlayerInput = (nick) => {
+  const errors = {};
+  if (nick.trim() === "") {
+    errors.nick = "Namn saknas";
+  } else {
+    // checks for html
+    const regEx = /^/;
+    if (!nick.match(regEx)) {
+      errors.nick = "Otillåtna tecken";
+    }
   }
 
   return {

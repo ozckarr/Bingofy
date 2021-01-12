@@ -5,7 +5,7 @@ const matchSchema = new Schema({
   bingoId: String,
   createdAt: String,
   username: String,
-  player: [
+  players: [
     {
       nick: String,
       finishedAt: String,
