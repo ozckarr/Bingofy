@@ -2,19 +2,17 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { UserInputError } = require("apollo-server");
 
-const {
-  validatePlayerInput,
-  validateLoginInput,
-} = require("../../util/validatiors");
+const { validatePlayerInput } = require("../../util/validatiors");
 const { SECRET_KEY } = require("../../config");
 const Match = require("../../models/Match");
+const Player = require("../../models/Player");
 
-function generateToken(player, matchId) {
+function generateToken(player) {
   return jwt.sign(
     {
       id: player.id,
       nick: player.nick,
-      matchId,
+      matchId: player.gameId,
     },
     SECRET_KEY,
     { expiresIn: "24h" }
@@ -23,82 +21,50 @@ function generateToken(player, matchId) {
 
 module.exports = {
   Mutation: {
-    /*async login(_, { username, password }) {
-      const { errors, valid } = validateLoginInput(username, password);
-
-      if (!valid) {
-        throw new UserInputError("Errors", { errors });
-      }
-
-      const user = await User.findOne({ username });
-
-      if (!user) {
-        errors.general = "User not found";
-        throw new UserInputError("User not found", { errors });
-      }
-
-      const match = await bcrypt.compare(password, user.password);
-      if (!match) {
-        errors.general = "Wrong crendetials";
-        throw new UserInputError("Wrong crendetials", { errors });
-      }
-
-      const token = generateToken(user, gameCode);
-
-      return {
-        ...user._doc,
-        id: user._id,
-        token,
-      };
-    },*/
     async joinMatch(_, { gameCode, nick }) {
-      // Validate player data
+      // Validate nick data
       const { valid, errors } = validatePlayerInput(nick);
       if (!valid) {
-        throw new UserInputError("Errors", { errors });
+        throw new UserInputError("Otillåtet Nick", { errors });
       }
 
+      // Make sure that the nick is not used
       let match = await Match.find({ gameCode });
       match = match[0];
+
+      //
+      /* TODO: Använd filter(?) på Player med {match.id}. Använd array med find
+      const user = await Player.findOne({ username });
+      if (user) {
+        throw new UserInputError("Nick är taget", {
+          errors: {
+            username: "This nick is taken",
+          },
+        });
+      }*/
       if (match) {
-        // Couldn't get .find() to work
-        // this code checks if Nick is taken. (-1 means that it doesn't exist in the array)
-        const checkNick = match.players.findIndex((c) => c.nick === nick);
-        if (checkNick === -1) {
-          // Creates an shuffles game array
-          let boxOrder = [];
-          for (let i = 0; i < 25; i++) {
-            boxOrder.push({
-              placement: i,
-              checked: false,
-            });
-          }
-          boxOrder = boxOrder.sort(() => Math.random() - 0.5);
-
-          match.players.unshift({
-            nick,
-            finishedAt: "",
-            boxOrder,
-          });
-          const res = await match.save();
-          // Use the res to add token, then return
-
-          console.log(res);
-
-          return match;
-        } else {
-          throw new UserInputError("Nick upptaget", { errors });
+        let playerList = await Player.filter(player, { matchId: match.id });
+        if (playerList) {
+          console.log(playerList);
         }
-      } else {
-        throw new UserInputError("Felaktig kod", { errors });
       }
-      /*
-      no new player
-      const newPlayer = new User({
-        email,
-        username,
-        password,
-        createdAt: new Date().toISOString(),
+
+      // Creates an shuffles game array
+      let boxOrder = [];
+      for (let i = 0; i < 25; i++) {
+        boxOrder.push({
+          placement: i,
+          checked: false,
+        });
+      }
+      boxOrder = boxOrder.sort(() => Math.random() - 0.5);
+
+      const newPlayer = new Player({
+        nick,
+        finishedAt: "",
+        gameCode,
+        matchId: match.id,
+        boxOrder,
       });
 
       const res = await newPlayer.save();
@@ -110,7 +76,6 @@ module.exports = {
         id: res._id,
         token,
       };
-      */
     },
   },
 };

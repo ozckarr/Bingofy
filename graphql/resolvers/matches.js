@@ -34,7 +34,8 @@ module.exports = {
       const newMatch = new Match({
         gameCode,
         bingoId,
-        username: user.id,
+        userId: user.id,
+        username: user.username,
         createdAt: new Date().toISOString(),
       });
 

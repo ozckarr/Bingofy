@@ -55,14 +55,15 @@ module.exports = gql`
     bingoId: String!
     createdAt: String!
     username: String!
-    players: [Player]
   }
   type Player {
     id: ID!
     nick: String!
     finishedAt: String
-    token: String!
+    matchId: String
+    gameCode: String
     boxOrder: [BoxOrder]
+    token: String!
   }
   type BoxOrder {
     id: ID!
@@ -89,6 +90,6 @@ module.exports = gql`
     deleteComment(postId: ID!, commentId: ID!): Post!
     likePost(postId: ID!): Post!
     createMatch(bingoId: String!): Match!
-    joinMatch(nick: String!, gameCode: String!): Match!
+    joinMatch(gameCode: String!, nick: String!): Player!
   }
 `;
