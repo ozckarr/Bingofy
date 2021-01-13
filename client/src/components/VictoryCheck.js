@@ -30,6 +30,7 @@ function VictoryCheck({ bingoBoxes }) {
   } else {
     victoryMarkup = <></>;
   }
+  // TODO: Comfirm Bingo(add finishedAt time)
 
   return victoryMarkup;
 }
