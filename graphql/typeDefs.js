@@ -43,7 +43,6 @@ module.exports = gql`
     nick: String!
     finishedAt: String
     boxOrder: [BoxOrder]
-    token: String!
   }
   type BoxOrder {
     id: ID!

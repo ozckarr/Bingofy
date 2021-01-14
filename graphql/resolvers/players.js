@@ -18,19 +18,19 @@ function generateToken(match) {
   );
 }
 
+// TODO FinishedAt
+
 module.exports = {
   Mutation: {
     async joinMatch(_, { gameCode, nick }) {
       // Validate nick data
-      const { valid, errors } = validatePlayerInput(nick);
+      const { valid, errors } = validatePlayerInput(gameCode, nick);
       if (!valid) {
-        throw new UserInputError("Otillåtet Nick", { errors });
+        throw new UserInputError("Otillåtet namn", { errors });
       }
 
       let match = await Match.find({ gameCode });
       match = match[0];
-      console.log(gameCode);
-      console.log(nick);
 
       if (match) {
         // Couldn't get .find() to work
@@ -62,9 +62,20 @@ module.exports = {
             id: res._id,
             token,
           };
+        } else {
+          throw new UserInputError("Username is taken", {
+            errors: {
+              nick: "Upptaget namn",
+            },
+          });
         }
+      } else {
+        throw new UserInputError("Nonexistent code", {
+          errors: {
+            gameCode: "fel kod",
+          },
+        });
       }
-      throw new UserInputError("Upptaget Nick", { errors });
     },
   },
 };

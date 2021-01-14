@@ -11,6 +11,7 @@ import {
 } from "semantic-ui-react";
 
 import DeleteButton from "../components/DeleteButton";
+import JoinMatch from "../components/JoinMatch";
 import { AuthContext } from "../context/auth";
 import { FETCH_BINGOS_QUERY } from "../util/graphql";
 
@@ -24,6 +25,7 @@ function Home() {
 
   return (
     <Container>
+      <JoinMatch />
       {loading ? (
         <Loader />
       ) : user ? (

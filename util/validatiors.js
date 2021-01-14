@@ -30,7 +30,7 @@ module.exports.validateRegisterInput = (
   };
 };
 
-module.exports.validatePlayerInput = (nick) => {
+module.exports.validatePlayerInput = (gameCode, nick) => {
   const errors = {};
   if (nick.trim() === "") {
     errors.nick = "Namn saknas";
@@ -40,6 +40,10 @@ module.exports.validatePlayerInput = (nick) => {
     if (!nick.match(regEx)) {
       errors.nick = "Otillåtna tecken";
     }
+  }
+
+  if (gameCode.trim() === "") {
+    errors.gameCode = "Kod saknas";
   }
 
   return {

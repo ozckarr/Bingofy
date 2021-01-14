@@ -1,7 +1,9 @@
-const { AuthenticationError, UserInputError } = require("apollo-server");
+const { UserInputError } = require("apollo-server");
 
 const Match = require("../../models/Match");
 const checkAuth = require("../../util/check-auth");
+
+//TODO delete match
 
 module.exports = {
   Query: {
