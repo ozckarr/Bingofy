@@ -5,17 +5,16 @@ const { UserInputError } = require("apollo-server");
 const { validatePlayerInput } = require("../../util/validatiors");
 const { SECRET_KEY } = require("../../config");
 const Match = require("../../models/Match");
-const Player = require("../../models/Player");
 
-function generateToken(player) {
+function generateToken(match) {
   return jwt.sign(
     {
-      id: player.id,
-      nick: player.nick,
-      matchId: player.gameId,
+      playerId: match.players[0]._id,
+      nick: match.players[0].nick,
+      matchId: match.id,
     },
     SECRET_KEY,
-    { expiresIn: "24h" }
+    { expiresIn: "72h" }
   );
 }
 
@@ -28,54 +27,44 @@ module.exports = {
         throw new UserInputError("Otillåtet Nick", { errors });
       }
 
-      // Make sure that the nick is not used
       let match = await Match.find({ gameCode });
       match = match[0];
+      console.log(gameCode);
+      console.log(nick);
 
-      //
-      /* TODO: Använd filter(?) på Player med {match.id}. Använd array med find
-      const user = await Player.findOne({ username });
-      if (user) {
-        throw new UserInputError("Nick är taget", {
-          errors: {
-            username: "This nick is taken",
-          },
-        });
-      }*/
       if (match) {
-        let playerList = await Player.filter(player, { matchId: match.id });
-        if (playerList) {
-          console.log(playerList);
+        // Couldn't get .find() to work
+        // this code checks if Nick is taken. (-1 means that it doesn't exist in the array)
+        const checkNick = match.players.findIndex((c) => c.nick === nick);
+        if (checkNick === -1) {
+          // Creates an shuffles game array
+          let boxOrder = [];
+          for (let i = 0; i < 25; i++) {
+            boxOrder.push({
+              placement: i,
+              checked: false,
+            });
+          }
+          boxOrder = boxOrder.sort(() => Math.random() - 0.5);
+
+          match.players.unshift({
+            nick,
+            finishedAt: "",
+            boxOrder,
+          });
+          const res = await match.save();
+          // Use the res to add token, then return
+
+          const token = generateToken(res);
+
+          return {
+            ...res._doc,
+            id: res._id,
+            token,
+          };
         }
       }
-
-      // Creates an shuffles game array
-      let boxOrder = [];
-      for (let i = 0; i < 25; i++) {
-        boxOrder.push({
-          placement: i,
-          checked: false,
-        });
-      }
-      boxOrder = boxOrder.sort(() => Math.random() - 0.5);
-
-      const newPlayer = new Player({
-        nick,
-        finishedAt: "",
-        gameCode,
-        matchId: match.id,
-        boxOrder,
-      });
-
-      const res = await newPlayer.save();
-
-      const token = generateToken(res);
-
-      return {
-        ...res._doc,
-        id: res._id,
-        token,
-      };
+      throw new UserInputError("Upptaget Nick", { errors });
     },
   },
 };

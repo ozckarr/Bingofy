@@ -6,6 +6,18 @@ const matchSchema = new Schema({
   createdAt: String,
   userId: String,
   username: String,
+  players: [
+    {
+      nick: String,
+      finishedAt: String,
+      boxOrder: [
+        {
+          placement: String,
+          checked: Boolean,
+        },
+      ],
+    },
+  ],
 });
 
 module.exports = model("Match", matchSchema);
