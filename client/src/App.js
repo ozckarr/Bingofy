@@ -6,6 +6,7 @@ import "semantic-ui-css/semantic.min.css";
 import "./App.scss";
 
 import { AuthProvider } from "./context/auth";
+import { PlayerProvider } from "./context/playerAuth";
 import { AuthRoute, AuthRouteLoggedIn } from "./util/AuthRoute";
 
 import MenuBar from "./components/MenuBar";
@@ -19,22 +20,20 @@ import MatchView from "./pages/MatchView";
 function App() {
   return (
     <AuthProvider>
-      <Router>
-        <Container>
-          <MenuBar />
-          <Route exact path="/" component={Home} />
-          <AuthRoute exact path="/login" component={Login} />
-          <AuthRoute exact path="/register" component={Register} />
-          <AuthRouteLoggedIn exact path="/addBingo" component={AddBingo} />
-          {/*Change to player-token-allow not AuthRouteLoggedIn */}
-          <AuthRouteLoggedIn
-            exact
-            path="/match/:bingoId"
-            component={MatchView}
-          />
-          <Route exact path="/bingos/:bingoId" component={BingoView} />
-        </Container>
-      </Router>
+      <PlayerProvider>
+        <Router>
+          <Container>
+            <MenuBar />
+            <Route exact path="/" component={Home} />
+            <AuthRoute exact path="/login" component={Login} />
+            <AuthRoute exact path="/register" component={Register} />
+            <AuthRouteLoggedIn exact path="/addBingo" component={AddBingo} />
+            {/*Change to player-token-allow not AuthRouteLoggedIn */}
+            <Route exact path="/match/:bingoId" component={MatchView} />
+            <Route exact path="/bingos/:bingoId" component={BingoView} />
+          </Container>
+        </Router>
+      </PlayerProvider>
     </AuthProvider>
   );
 }

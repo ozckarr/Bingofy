@@ -11,6 +11,7 @@ function generateToken(match) {
     {
       playerId: match.players[0]._id,
       nick: match.players[0].nick,
+      bingoId: match.bingoId,
       matchId: match.id,
     },
     SECRET_KEY,

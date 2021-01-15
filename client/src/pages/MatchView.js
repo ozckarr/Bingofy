@@ -3,7 +3,7 @@ import gql from "graphql-tag";
 import { useQuery, useMutation } from "@apollo/client";
 import { Card, Container, Loader } from "semantic-ui-react";
 
-import { AuthContext } from "../context/auth";
+import { PlayerContext } from "../context/playerAuth";
 import rearrangeBingoBoxes from "../util/rearrangeBingoBoxes";
 
 import { Redirect } from "react-router-dom";
@@ -12,7 +12,8 @@ import VictoryCheck from "../components/VictoryCheck";
 
 function MatchView(props) {
   const bingoId = props.match.params.bingoId;
-  const { user } = useContext(AuthContext);
+  const { player } = useContext(PlayerContext);
+
   const [selectedBox, setSelectedBox] = useState({
     id: "",
     title: "",
@@ -49,7 +50,7 @@ function MatchView(props) {
   });
 
   let bingoMarkup;
-  if (!user) {
+  if (!player) {
     bingoMarkup = <Redirect to="/" />;
   } else {
     if (loading) {

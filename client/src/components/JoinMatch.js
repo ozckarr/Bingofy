@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Form, Button } from "semantic-ui-react";
 import { useMutation } from "@apollo/client";
 import gql from "graphql-tag";
 import { useHistory } from "react-router-dom";
 
+import { PlayerContext } from "../context/playerAuth";
+
 function JoinMatch() {
+  const context = useContext(PlayerContext);
   const [errors, setErrors] = useState({});
   let history = useHistory();
 
@@ -18,8 +21,8 @@ function JoinMatch() {
   };
 
   const [addPlayer, { loading }] = useMutation(ADD_PLAYER, {
-    update(proxy, result) {
-      console.log(result);
+    update(_, { data: { joinMatch: playerData } }) {
+      context.join(playerData);
     },
     onCompleted({ joinMatch: { bingoId } }) {
       history.push(`/match/${bingoId}`);
@@ -37,7 +40,7 @@ function JoinMatch() {
   };
 
   return (
-    <div className="form-container">
+    <div>
       <Form onSubmit={onSubmit} noValidate className={loading ? "loading" : ""}>
         <h1>Anslut till spel</h1>
         <Form.Input
@@ -78,6 +81,10 @@ const ADD_PLAYER = gql`
     joinMatch(gameCode: $gameCode, nick: $nick) {
       token
       bingoId
+      players {
+        id
+        nick
+      }
     }
   }
 `;

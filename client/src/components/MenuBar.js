@@ -1,34 +1,55 @@
 import React, { useContext, useState } from "react";
-import { Menu } from "semantic-ui-react";
+import { Menu, Confirm } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
 import { AuthContext } from "../context/auth";
+import { PlayerContext } from "../context/playerAuth";
 
 function MenuBar() {
   const { user, logout } = useContext(AuthContext);
+  const { player, leave } = useContext(PlayerContext);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+
   const pathname = window.location.pathname;
 
   const path = pathname === "/" ? "home" : pathname.substr(1);
   const [activeItem, setActiveItem] = useState(path);
 
   const handleItemClick = (e, { name }) => setActiveItem(name);
-
-  const MenuBar = user ? (
-    <Menu pointing secondary size="massive" color="orange">
-      <Menu.Item name={user.username} active as={Link} to="/" />
-
-      <Menu.Menu position="right">
-        <Menu.Item
-          icon="plus square outline"
-          active={activeItem === "addBingo"}
-          onClick={handleItemClick}
-          as={Link}
-          to="/addBingo"
+  // onClick={leave}
+  let MenuBar;
+  if (player) {
+    MenuBar = (
+      <Menu pointing secondary size="massive" color="orange">
+        <Menu.Menu position="right">
+          <Menu.Item icon="x" onClick={() => setConfirmOpen(true)} />
+        </Menu.Menu>
+        <Confirm
+          open={confirmOpen}
+          content="Är du säker? Du kommer inte kunna att fortsätta."
+          onCancel={() => setConfirmOpen(false)}
+          onConfirm={leave}
         />
-        <Menu.Item name="logout" onClick={logout} />
-      </Menu.Menu>
-    </Menu>
-  ) : (
+      </Menu>
+    );
+  } else if (user) {
+    MenuBar = (
+      <Menu pointing secondary size="massive" color="orange">
+        <Menu.Item name={user.username} active as={Link} to="/" />
+
+        <Menu.Menu position="right">
+          <Menu.Item
+            icon="plus square outline"
+            active={activeItem === "addBingo"}
+            onClick={handleItemClick}
+            as={Link}
+            to="/addBingo"
+          />
+          <Menu.Item name="logout" onClick={logout} />
+        </Menu.Menu>
+      </Menu>
+    );
+  } else {
     <Menu pointing secondary size="massive" color="orange">
       <Menu.Item
         name="home"
@@ -54,8 +75,8 @@ function MenuBar() {
           to="/register"
         />
       </Menu.Menu>
-    </Menu>
-  );
+    </Menu>;
+  }
   return MenuBar;
 }
 
