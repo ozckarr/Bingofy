@@ -34,6 +34,14 @@ module.exports = {
       match = match[0];
 
       if (match) {
+        if (match.finishedAt !== "") {
+          throw new UserInputError("Finished match", {
+            errors: {
+              gameCode: "Matchen är redan påbörjad eller klar",
+            },
+          });
+        }
+
         // Couldn't get .find() to work
         // this code checks if Nick is taken. (-1 means that it doesn't exist in the array)
         const checkNick = match.players.findIndex((c) => c.nick === nick);

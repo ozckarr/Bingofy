@@ -19,22 +19,26 @@ module.exports = {
     },
   },
   Mutation: {
-    async createMatch(_, { bingoId }, context) {
+    async createMatch(_, { bingoId, bingoName }, context) {
       const user = checkAuth(context);
 
       var gameCode = "";
       var possible =
         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-      for (var i = 0; i < 5; i++)
+      for (var i = 0; i < 6; i++) {
         gameCode += possible.charAt(
           Math.floor(Math.random() * possible.length)
         );
+        //TODO: If match = await Match.find({ gameCode }), redo
+      }
 
       const newMatch = new Match({
         gameCode,
         bingoId,
+        bingoName,
         userId: user.id,
+        finishedAt: "",
         username: user.username,
         createdAt: new Date().toISOString(),
       });
@@ -49,8 +53,6 @@ module.exports = {
       if (match) {
         const pIndex = match.players.findIndex((i) => i.id === playerId);
 
-        console.log(bingoBoxId);
-
         const bIndex = match.players[pIndex].boxOrder.findIndex(
           (i) => i.id === bingoBoxId
         );
@@ -61,6 +63,40 @@ module.exports = {
         await match.save();
 
         return match;
+      }
+    },
+    bingoConfirm: async (_, { matchId, playerId }) => {
+      const match = await Match.findById(matchId);
+
+      if (match) {
+        if (match.finishedAt === "") {
+          match.finishedAt = new Date().toISOString();
+        }
+
+        const index = match.players.findIndex((i) => i.id === playerId);
+
+        // Prevents player from changing finish-time
+        if (match.players[index].finishedAt === "") {
+          match.players[index].finishedAt = new Date().toISOString();
+        }
+
+        await match.save();
+
+        return match;
+      }
+    },
+    async getHighscore(_, { gameCode }) {
+      try {
+        let match = await Match.find({ gameCode });
+        match = match[0];
+
+        if (match) {
+          return match;
+        } else {
+          throw new UserInputError("Felaktig kod");
+        }
+      } catch (err) {
+        throw new Error(err);
       }
     },
   },

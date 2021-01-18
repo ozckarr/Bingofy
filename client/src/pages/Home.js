@@ -31,6 +31,11 @@ function Home() {
       ) : user ? (
         <Transition.Group>
           {/*TODO nonloggedin welcome screen */}
+
+          <Button circular color="orange" basic as={Link} to={`/highscore/`}>
+            Highscore
+          </Button>
+
           {bingos &&
             bingos.map((bingo) => (
               <Grid.Column key={bingo.id} style={{ marginBottom: "1em" }}>

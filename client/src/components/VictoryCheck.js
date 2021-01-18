@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Card } from "semantic-ui-react";
+import VictoryMarkup from "./VictoryMarkup";
 
 function VictoryCheck({ bingoBoxes }) {
   let box = [];
@@ -26,7 +26,7 @@ function VictoryCheck({ bingoBoxes }) {
     (box[0] && box[6] && box[12] && box[18] && box[24]) ||
     (box[4] && box[8] && box[12] && box[16] && box[20])
   ) {
-    victoryMarkup = <Card.Header>Vinnare</Card.Header>;
+    victoryMarkup = <VictoryMarkup />;
   } else {
     victoryMarkup = <></>;
   }

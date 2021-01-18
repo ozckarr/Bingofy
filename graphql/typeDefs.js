@@ -31,6 +31,7 @@ module.exports = gql`
     id: ID!
     gameCode: String!
     bingoId: String!
+    bingoName: String!
     createdAt: String!
     userId: String
     username: String!
@@ -65,7 +66,9 @@ module.exports = gql`
       playerId: String!
       bingoBoxId: String!
     ): Match!
-    createMatch(bingoId: String!): Match!
+    bingoConfirm(matchId: String!, playerId: String!): Match!
+    createMatch(bingoId: String!, bingoName: String!): Match!
     joinMatch(gameCode: String!, nick: String!): Match!
+    getHighscore(gameCode: String!): Match
   }
 `;

@@ -1,65 +1,55 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { Form, Button } from "semantic-ui-react";
 import { useMutation } from "@apollo/client";
 import gql from "graphql-tag";
 import { useHistory } from "react-router-dom";
 
-import { PlayerContext } from "../context/playerAuth";
-
-function JoinMatch() {
-  const context = useContext(PlayerContext);
+function Highscore() {
   const [errors, setErrors] = useState({});
   let history = useHistory();
 
   const [values, setValues] = useState({
     gameCode: "",
-    nick: "",
   });
 
   const onChange = (event) => {
     setValues({ ...values, [event.target.name]: event.target.value });
   };
 
-  const [addPlayer, { loading }] = useMutation(ADD_PLAYER, {
-    update(_, { data: { joinMatch: playerData } }) {
-      context.join(playerData);
+  const [getHighscore, { loading }] = useMutation(GET_HIGHSCORE, {
+    variables: values,
+    update(proxy, result) {
+      values.gameCode = "";
     },
-    onCompleted({ joinMatch: { bingoId } }) {
-      history.push(`/match/${bingoId}`);
+    onCompleted({ getHighscore, getHighscore: { id } }) {
+      console.log(getHighscore);
+
+      history.push(`/highscore/${id}`);
     },
     onError(err) {
-      setErrors(err);
+      console.log(err);
+      // TODO Fixa backend check
+      setErrors("Fel kod");
     },
-    variables: values,
   });
+
   const onSubmit = (event) => {
     event.preventDefault();
-    addPlayer();
+    getHighscore();
   };
-
   return (
     <div>
       <Form onSubmit={onSubmit} noValidate className={loading ? "loading" : ""}>
-        <h1>Anslut till spel</h1>
+        <h1>Hitta Highscore</h1>
         <Form.Input
           label="Bingokod"
           placeholder="Koden till bingot..."
           name="gameCode"
           type="text"
           value={values.gameCode}
-          error={errors.gameCode ? true : false}
           onChange={onChange}
         ></Form.Input>
-        <Form.Input
-          label="Namn"
-          placeholder="Namn i bingot"
-          name="nick"
-          type="text"
-          value={values.nick}
-          error={errors.nick ? true : false}
-          onChange={onChange}
-        ></Form.Input>
-        <Button type="submit">Spela</Button>
+        <Button type="submit">Se Highscore</Button>
       </Form>
       {Object.keys(errors).length > 0 && (
         <div className="ui error message">
@@ -74,17 +64,13 @@ function JoinMatch() {
   );
 }
 
-const ADD_PLAYER = gql`
-  mutation joinMatch($gameCode: String!, $nick: String!) {
-    joinMatch(gameCode: $gameCode, nick: $nick) {
-      token
-      bingoId
-      players {
-        id
-        nick
-      }
+const GET_HIGHSCORE = gql`
+  mutation getHighscore($gameCode: String!) {
+    getHighscore(gameCode: $gameCode) {
+      id
+      gameCode
     }
   }
 `;
 
-export default JoinMatch;
+export default Highscore;

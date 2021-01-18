@@ -16,6 +16,8 @@ import Register from "./pages/Register";
 import BingoView from "./pages/BingoView";
 import AddBingo from "./pages/AddBingo";
 import MatchView from "./pages/MatchView";
+import Highscore from "./pages/Highscore";
+import HighscoreView from "./pages/HighscoreView";
 
 function App() {
   return (
@@ -28,9 +30,10 @@ function App() {
             <AuthRoute exact path="/login" component={Login} />
             <AuthRoute exact path="/register" component={Register} />
             <AuthRouteLoggedIn exact path="/addBingo" component={AddBingo} />
-            {/*Change to player-token-allow not AuthRouteLoggedIn */}
             <Route exact path="/match/:bingoId" component={MatchView} />
             <Route exact path="/bingos/:bingoId" component={BingoView} />
+            <Route exact path="/highscore" component={Highscore} />
+            <Route exact path="/highscore/:matchId" component={HighscoreView} />
           </Container>
         </Router>
       </PlayerProvider>

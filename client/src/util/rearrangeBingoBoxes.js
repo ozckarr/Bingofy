@@ -20,7 +20,6 @@ function rearrangeBingoBoxes(bingoBoxes, playerInfo) {
   for (let i = 0; i < playersOrder.length; i++) {
     newBoxOrder[i] = mergedList[playersOrder[i]];
   }
-  console.log(newBoxOrder);
 
   return newBoxOrder;
 }
