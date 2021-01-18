@@ -3,8 +3,6 @@ const { UserInputError } = require("apollo-server");
 const Match = require("../../models/Match");
 const checkAuth = require("../../util/check-auth");
 
-//TODO delete match
-
 module.exports = {
   Query: {
     async getMatch(_, { matchId }) {
@@ -44,6 +42,26 @@ module.exports = {
       const match = await newMatch.save();
 
       return match;
+    },
+    checkBingoBox: async (_, { matchId, playerId, bingoBoxId }) => {
+      const match = await Match.findById(matchId);
+
+      if (match) {
+        const pIndex = match.players.findIndex((i) => i.id === playerId);
+
+        console.log(bingoBoxId);
+
+        const bIndex = match.players[pIndex].boxOrder.findIndex(
+          (i) => i.id === bingoBoxId
+        );
+
+        //Toggles the check/unchecked box
+        match.players[pIndex].boxOrder[bIndex].checked = !match.players[pIndex]
+          .boxOrder[bIndex].checked;
+        await match.save();
+
+        return match;
+      }
     },
   },
 };

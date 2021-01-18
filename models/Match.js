@@ -6,6 +6,7 @@ const matchSchema = new Schema({
   createdAt: String,
   userId: String,
   username: String,
+  finishedAt: String,
   players: [
     {
       nick: String,

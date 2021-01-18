@@ -12,7 +12,10 @@ import VictoryCheck from "../components/VictoryCheck";
 
 function MatchView(props) {
   const bingoId = props.match.params.bingoId;
-  const { player } = useContext(PlayerContext);
+  const {
+    player,
+    player: { matchId },
+  } = useContext(PlayerContext);
 
   const [selectedBox, setSelectedBox] = useState({
     id: "",
@@ -30,18 +33,28 @@ function MatchView(props) {
     });
   };
 
-  const { loading, data } = useQuery(FETCH_BINGO_QUERY, {
+  // Need to deconstruct this way, otherwise will match and bingo cancel out let data
+  let bingo = useQuery(FETCH_BINGO_QUERY, {
     variables: {
       bingoId,
     },
   });
+  let loading = bingo.loading;
+
+  let match = useQuery(FETCH_MATCH_QUERY, {
+    variables: {
+      matchId,
+    },
+  });
+  let matchLoading = match.loading;
 
   const [checkBox] = useMutation(CHECK_BINGOBOX_MUTATION, {
     update() {
       setSelectedBox({ ...selectedBox, checked: !selectedBox.checked });
     },
     variables: {
-      bingoId: bingoId,
+      matchId,
+      playerId: player.playerId,
       bingoBoxId: selectedBox.id,
     },
     onError(err) {
@@ -55,9 +68,14 @@ function MatchView(props) {
   } else {
     if (loading) {
       bingoMarkup = <Loader />;
+    } else if (matchLoading) {
+      bingoMarkup = <Loader />;
     } else {
-      const { title, bingoBoxes } = data.getBingo;
-      const reOrderedBingoBoxes = rearrangeBingoBoxes(bingoBoxes);
+      const { title, bingoBoxes } = bingo.data.getBingo;
+      const playerInfo = match.data.getMatch.players.find(
+        (x) => x.id === player.playerId
+      );
+      const reOrderedBingoBoxes = rearrangeBingoBoxes(bingoBoxes, playerInfo);
       bingoMarkup = (
         <Container>
           <Card fluid>
@@ -112,19 +130,51 @@ const FETCH_BINGO_QUERY = gql`
         id
         title
         summery
-        checked
+      }
+    }
+  }
+`;
+
+const FETCH_MATCH_QUERY = gql`
+  query($matchId: ID!) {
+    getMatch(matchId: $matchId) {
+      gameCode
+      bingoId
+      players {
+        id
+        nick
+        finishedAt
+        boxOrder {
+          id
+          placement
+          checked
+        }
       }
     }
   }
 `;
 
 const CHECK_BINGOBOX_MUTATION = gql`
-  mutation checkBingoBox($bingoId: String!, $bingoBoxId: String!) {
-    checkBingoBox(bingoId: $bingoId, bingoBoxId: $bingoBoxId) {
-      id
-      bingoBoxes {
+  mutation checkBingoBox(
+    $matchId: String!
+    $playerId: String!
+    $bingoBoxId: String!
+  ) {
+    checkBingoBox(
+      matchId: $matchId
+      playerId: $playerId
+      bingoBoxId: $bingoBoxId
+    ) {
+      gameCode
+      bingoId
+      players {
         id
-        checked
+        nick
+        finishedAt
+        boxOrder {
+          placement
+          checked
+        }
       }
     }
   }

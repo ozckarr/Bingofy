@@ -16,17 +16,16 @@ function MenuBar() {
   const [activeItem, setActiveItem] = useState(path);
 
   const handleItemClick = (e, { name }) => setActiveItem(name);
-  // onClick={leave}
   let MenuBar;
   if (player) {
     MenuBar = (
-      <Menu pointing secondary size="massive" color="orange">
+      <Menu secondary size="massive" color="orange">
         <Menu.Menu position="right">
-          <Menu.Item icon="x" onClick={() => setConfirmOpen(true)} />
+          <Menu.Item icon="x" onClick={() => setConfirmOpen(true)} active />
         </Menu.Menu>
         <Confirm
           open={confirmOpen}
-          content="Är du säker? Du kommer inte kunna att fortsätta."
+          content="Är du säker? Du kommer inte kunna att fortsätta med denna bricka."
           onCancel={() => setConfirmOpen(false)}
           onConfirm={leave}
         />

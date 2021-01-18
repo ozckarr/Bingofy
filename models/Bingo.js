@@ -9,7 +9,6 @@ const bingoSchema = new Schema({
     {
       title: String,
       summery: String,
-      checked: Boolean,
     },
   ],
 });

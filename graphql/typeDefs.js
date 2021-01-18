@@ -13,7 +13,6 @@ module.exports = gql`
     id: ID!
     title: String!
     summery: String
-    checked: Boolean!
   }
   type User {
     id: ID!
@@ -36,6 +35,7 @@ module.exports = gql`
     userId: String
     username: String!
     players: [Player]
+    finishedAt: String
     token: String
   }
   type Player {
@@ -60,7 +60,11 @@ module.exports = gql`
     createBingo(title: String!, description: String): Bingo!
     deleteBingo(bingoId: ID!): String!
     createBingoBox(bingoId: String!, title: String!, summery: String): Bingo!
-    checkBingoBox(bingoId: String!, bingoBoxId: String!): Bingo!
+    checkBingoBox(
+      matchId: String!
+      playerId: String!
+      bingoBoxId: String!
+    ): Match!
     createMatch(bingoId: String!): Match!
     joinMatch(gameCode: String!, nick: String!): Match!
   }

@@ -1,36 +1,27 @@
-function rearrangeBingoBoxes(bingoBoxes) {
-  // temp...
-  const playersOrder = [
-    1,
-    24,
-    2,
-    23,
-    3,
-    22,
-    4,
-    21,
-    5,
-    20,
-    6,
-    19,
-    7,
-    18,
-    8,
-    17,
-    9,
-    16,
-    10,
-    15,
-    11,
-    14,
-    12,
-    13,
-    0,
-  ];
+function rearrangeBingoBoxes(bingoBoxes, playerInfo) {
+  let mergedList = [];
+
+  // Merges all data
+  for (let i = 0; i < playerInfo.boxOrder.length; i++) {
+    mergedList.push({
+      ...playerInfo.boxOrder[i],
+      title: bingoBoxes[i].title,
+      summery: bingoBoxes[i].summery,
+    });
+  }
+
+  // Takes the order for the rearrangement
+  let playersOrder = [];
+  for (let i = 0; i < playerInfo.boxOrder.length; i++) {
+    playersOrder.push(playerInfo.boxOrder[i].placement);
+  }
+
   let newBoxOrder = new Array(25).fill({});
   for (let i = 0; i < playersOrder.length; i++) {
-    newBoxOrder[i] = bingoBoxes[playersOrder[i]];
+    newBoxOrder[i] = mergedList[playersOrder[i]];
   }
+  console.log(newBoxOrder);
+
   return newBoxOrder;
 }
 
