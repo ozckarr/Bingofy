@@ -7,6 +7,7 @@ function AuthRoute({ component: Component, ...rest }) {
   const { user } = useContext(AuthContext);
   const { player } = useContext(PlayerContext);
 
+  //TODO Gör till en hel if-sats
   return !player ? (
     <Route
       {...rest}

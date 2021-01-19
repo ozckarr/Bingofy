@@ -18,6 +18,7 @@ import AddBingo from "./pages/AddBingo";
 import MatchView from "./pages/MatchView";
 import Highscore from "./pages/Highscore";
 import HighscoreView from "./pages/HighscoreView";
+import BingoList from "./pages/BingoList";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
             <Route exact path="/bingos/:bingoId" component={BingoView} />
             <Route exact path="/highscore" component={Highscore} />
             <Route exact path="/highscore/:matchId" component={HighscoreView} />
+            <AuthRouteLoggedIn exact path="/bingos" component={BingoList} />
           </Container>
         </Router>
       </PlayerProvider>

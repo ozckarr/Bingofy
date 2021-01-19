@@ -40,7 +40,6 @@ function JoinMatch() {
   return (
     <div>
       <Form onSubmit={onSubmit} noValidate className={loading ? "loading" : ""}>
-        <h1>Anslut till spel</h1>
         <Form.Input
           label="Bingokod"
           placeholder="Koden till bingot..."
