@@ -2,9 +2,9 @@ import React, { useContext, useState } from "react";
 import gql from "graphql-tag";
 import { useQuery, useMutation } from "@apollo/client";
 import { Button, Card, Form, Container, Loader } from "semantic-ui-react";
+import { Link } from "react-router-dom";
 
 import { AuthContext } from "../context/auth";
-//import DeleteButton from "../components/DeleteButton";
 
 import { Redirect } from "react-router-dom";
 
@@ -46,6 +46,7 @@ function BingoView(props) {
       bingoMarkup = <Loader />;
     } else {
       const { title, username, bingoBoxes } = data.getBingo;
+
       if (username === user.username) {
         bingoMarkup = (
           <Container>
@@ -78,17 +79,24 @@ function BingoView(props) {
                       name={title}
                       onChange={(event) => setSummery(event.target.value)}
                     />
-                    {/*TODO go back when 25> */}
-                    <p>{25 - bingoBoxes.length} Boxar kvar</p>
+                    {bingoBoxes.length === 24 ? (
+                      <>
+                        <p>{25 - bingoBoxes.length} Boxar kvar</p>
 
-                    <Button
-                      type="submit"
-                      icon="add"
-                      color="orange"
-                      disabled={title.trim() === ""}
-                      onClick={submitBox}
-                      circular
-                    />
+                        <Button
+                          type="submit"
+                          icon="add"
+                          color="orange"
+                          disabled={title.trim() === ""}
+                          onClick={submitBox}
+                          circular
+                        />
+                      </>
+                    ) : (
+                      <Button color="orange" fluid as={Link} to={`/bingos/`}>
+                        Klar
+                      </Button>
+                    )}
                   </Form>
                 </Card.Content>
               </Card>
@@ -121,7 +129,6 @@ const SUBMIT_BINGOBOX_MUTATION = gql`
         id
         title
         summery
-        checked
       }
     }
   }
@@ -139,7 +146,6 @@ const FETCH_BINGO_QUERY = gql`
         id
         title
         summery
-        checked
       }
     }
   }

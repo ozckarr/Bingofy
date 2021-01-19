@@ -42,7 +42,6 @@ function VictoryCheck() {
         <Button
           color="orange"
           fluid
-          fILFUN
           as={Link}
           to={`/highscore/${matchId}`}
           onClick={leave}
