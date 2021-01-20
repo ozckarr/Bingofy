@@ -38,12 +38,18 @@ function MatchView(props) {
     variables: {
       bingoId,
     },
+    onError(err) {
+      console.log(err);
+    },
   });
   let loading = bingo.loading;
 
   let match = useQuery(FETCH_MATCH_QUERY, {
     variables: {
       matchId,
+    },
+    onError(err) {
+      console.log(err);
     },
   });
   let matchLoading = match.loading;
@@ -130,6 +136,7 @@ const FETCH_BINGO_QUERY = gql`
         id
         title
         summery
+        cloudinaryId
       }
     }
   }

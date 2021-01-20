@@ -12,6 +12,7 @@ export const FETCH_BINGOS_QUERY = gql`
         id
         title
         summery
+        cloudinaryId
       }
     }
   }

@@ -51,3 +51,15 @@
 .selected .bingoBoxUnChecked {
   outline: 0.3em solid #f2711c;
 }
+
+.dropzone {
+  height: 8em;
+  width: 100%;
+  text-align: center;
+  border: 0.2em dashed #53321b;
+  padding-top: 3em;
+}
+
+.dropzoneActive {
+  border: 0.2em solid #53321b;
+}

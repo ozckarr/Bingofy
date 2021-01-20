@@ -6,7 +6,7 @@ const Bingo = require("../../models/Bingo");
 // Check Bingobox is in matches.js
 module.exports = {
   Mutation: {
-    createBingoBox: async (_, { bingoId, title, summery }) => {
+    createBingoBox: async (_, { bingoId, title, summery, cloudinaryId }) => {
       if (title.trim() === "") {
         throw new UserInputError("Behöver en titel", {
           errors: {
@@ -21,6 +21,7 @@ module.exports = {
         bingo.bingoBoxes.unshift({
           title,
           summery,
+          cloudinaryId,
           checked: false,
         });
         await bingo.save();

@@ -13,7 +13,7 @@ module.exports = gql`
     id: ID!
     title: String!
     summery: String
-    cloudinaryId: String!
+    cloudinaryId: String
   }
   type User {
     id: ID!
@@ -61,7 +61,12 @@ module.exports = gql`
     login(username: String!, password: String!): User!
     createBingo(title: String!, description: String): Bingo!
     deleteBingo(bingoId: ID!): String!
-    createBingoBox(bingoId: String!, title: String!, summery: String): Bingo!
+    createBingoBox(
+      bingoId: String!
+      title: String!
+      summery: String
+      cloudinaryId: String
+    ): Bingo!
     checkBingoBox(
       matchId: String!
       playerId: String!
