@@ -83,6 +83,7 @@ const CREATE_BINGO_MUTATION = gql`
         title
         summery
         checked
+        cloudinaryId
       }
     }
   }

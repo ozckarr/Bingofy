@@ -72,6 +72,15 @@ function BingoList() {
 
   return (
     <Transition.Group>
+      <Button
+        color="orange"
+        fluid
+        as={Link}
+        to="/addBingo"
+        style={{ marginBottom: "1em" }}
+      >
+        Skapa ny
+      </Button>
       {loading ? (
         <Loader />
       ) : (

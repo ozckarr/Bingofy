@@ -37,44 +37,39 @@ function MenuBar() {
         <Menu.Item name={user.username} active as={Link} to="/" />
 
         <Menu.Menu position="right">
-          <Menu.Item
-            icon="plus square outline"
-            active={activeItem === "addBingo"}
-            onClick={handleItemClick}
-            as={Link}
-            to="/addBingo"
-          />
           <Menu.Item name="logout" onClick={logout} />
         </Menu.Menu>
       </Menu>
     );
   } else {
-    <Menu pointing secondary size="massive" color="orange">
-      <Menu.Item
-        name="home"
-        active={activeItem === "home"}
-        onClick={handleItemClick}
-        as={Link}
-        to="/"
-      />
+    MenuBar = (
+      <Menu pointing secondary size="massive" color="orange">
+        <Menu.Item
+          name="home"
+          active={activeItem === "home"}
+          onClick={handleItemClick}
+          as={Link}
+          to="/"
+        />
 
-      <Menu.Menu position="right">
-        <Menu.Item
-          name="login"
-          active={activeItem === "login"}
-          onClick={handleItemClick}
-          as={Link}
-          to="/login"
-        />
-        <Menu.Item
-          name="register"
-          active={activeItem === "register"}
-          onClick={handleItemClick}
-          as={Link}
-          to="/register"
-        />
-      </Menu.Menu>
-    </Menu>;
+        <Menu.Menu position="right">
+          <Menu.Item
+            name="login"
+            active={activeItem === "login"}
+            onClick={handleItemClick}
+            as={Link}
+            to="/login"
+          />
+          <Menu.Item
+            name="register"
+            active={activeItem === "register"}
+            onClick={handleItemClick}
+            as={Link}
+            to="/register"
+          />
+        </Menu.Menu>
+      </Menu>
+    );
   }
   return MenuBar;
 }

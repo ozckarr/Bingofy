@@ -13,6 +13,7 @@ module.exports = gql`
     id: ID!
     title: String!
     summery: String
+    cloudinaryId: String!
   }
   type User {
     id: ID!

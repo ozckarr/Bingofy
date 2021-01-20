@@ -52,7 +52,7 @@ function Login(props) {
           error={errors.password ? true : false}
           onChange={onChange}
         />
-        <Button type="submit" primary>
+        <Button type="submit" color="orange">
           Login
         </Button>
       </Form>

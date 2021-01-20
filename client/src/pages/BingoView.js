@@ -1,6 +1,8 @@
 import React, { useContext, useState } from "react";
 import gql from "graphql-tag";
 import { useQuery, useMutation } from "@apollo/client";
+import Dropzone from "react-dropzone";
+import axios from "axios";
 import { Button, Card, Form, Container, Loader } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
@@ -79,7 +81,7 @@ function BingoView(props) {
                       name={title}
                       onChange={(event) => setSummery(event.target.value)}
                     />
-                    {bingoBoxes.length === 24 ? (
+                    {!(bingoBoxes.length > 24) ? (
                       <>
                         <p>{25 - bingoBoxes.length} Boxar kvar</p>
 
