@@ -147,6 +147,7 @@ const FETCH_MATCH_QUERY = gql`
     getMatch(matchId: $matchId) {
       gameCode
       bingoId
+      bingoName
       players {
         id
         nick

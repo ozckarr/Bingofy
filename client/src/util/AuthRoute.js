@@ -7,7 +7,6 @@ function AuthRoute({ component: Component, ...rest }) {
   const { user } = useContext(AuthContext);
   const { player } = useContext(PlayerContext);
 
-  //TODO Gör till en hel if-sats
   return !player ? (
     <Route
       {...rest}
@@ -36,4 +35,14 @@ function AuthRouteLoggedIn({ component: Component, ...rest }) {
   );
 }
 
-export { AuthRoute, AuthRouteLoggedIn };
+function AuthRouteOnlyPlayer({ component: Component, ...rest }) {
+  const { player } = useContext(PlayerContext);
+
+  return player ? (
+    <Route {...rest} render={(props) => <Component {...props} />} />
+  ) : (
+    <Redirect to="/" />
+  );
+}
+
+export { AuthRoute, AuthRouteLoggedIn, AuthRouteOnlyPlayer };

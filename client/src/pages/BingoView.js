@@ -23,7 +23,6 @@ function BingoView(props) {
   const { user } = useContext(AuthContext);
 
   const onDrop = useCallback((acceptedFiles) => {
-    //https://www.youtube.com/watch?v=V8w7K1HdrFo&ab_channel=LeighHalliday fix env
     const url = `https://api.cloudinary.com/v1_1/${NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/upload`;
     acceptedFiles.forEach(async (acceptedFile) => {
       const formData = new FormData();

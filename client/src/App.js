@@ -7,7 +7,11 @@ import "./App.scss";
 
 import { AuthProvider } from "./context/auth";
 import { PlayerProvider } from "./context/playerAuth";
-import { AuthRoute, AuthRouteLoggedIn } from "./util/AuthRoute";
+import {
+  AuthRoute,
+  AuthRouteLoggedIn,
+  AuthRouteOnlyPlayer,
+} from "./util/AuthRoute";
 
 import MenuBar from "./components/MenuBar";
 import Home from "./pages/Home";
@@ -31,8 +35,16 @@ function App() {
             <AuthRoute exact path="/login" component={Login} />
             <AuthRoute exact path="/register" component={Register} />
             <AuthRouteLoggedIn exact path="/addBingo" component={AddBingo} />
-            <Route exact path="/match/:bingoId" component={MatchView} />
-            <Route exact path="/bingos/:bingoId" component={BingoView} />
+            <AuthRouteOnlyPlayer
+              exact
+              path="/match/:bingoId"
+              component={MatchView}
+            />
+            <AuthRouteLoggedIn
+              exact
+              path="/bingos/:bingoId"
+              component={BingoView}
+            />
             <Route exact path="/highscore" component={Highscore} />
             <Route exact path="/highscore/:matchId" component={HighscoreView} />
             <AuthRouteLoggedIn exact path="/bingos" component={BingoList} />

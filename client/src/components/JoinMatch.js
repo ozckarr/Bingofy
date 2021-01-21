@@ -58,7 +58,9 @@ function JoinMatch() {
           error={errors.nick ? true : false}
           onChange={onChange}
         ></Form.Input>
-        <Button type="submit">Spela</Button>
+        <Button type="submit" color="orange" fluid>
+          Spela
+        </Button>
       </Form>
       {Object.keys(errors).length > 0 && (
         <div className="ui error message">
