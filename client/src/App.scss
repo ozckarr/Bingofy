@@ -63,3 +63,18 @@
 .dropzoneActive {
   border: 0.2em solid #53321b;
 }
+
+.dropzoneFull {
+  height: 8em;
+  width: 100%;
+  text-align: center;
+  border: 0.2em solid #53321b;
+  padding-top: 3em;
+  background: repeating-linear-gradient(
+    45deg,
+    #fff,
+    #fff 10px,
+    #53321b 10px,
+    #53321b 20px
+  );
+}

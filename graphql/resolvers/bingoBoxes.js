@@ -28,5 +28,17 @@ module.exports = {
         return bingo;
       } else throw new UserInputError("Kunde inte hitta bingot");
     },
+    async deleteBingoBox(_, { bingoId, bingoBoxId }) {
+      let bingo = await Bingo.findById(bingoId);
+      if (bingo) {
+        console.log(bingo);
+
+        bingo.bingoBoxes.pull(bingoBoxId);
+
+        await bingo.save();
+
+        return "Bingobox deleted successfully";
+      } else throw new UserInputError("Kunde inte ta bort boxen");
+    },
   },
 };

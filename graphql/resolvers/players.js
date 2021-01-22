@@ -15,11 +15,9 @@ function generateToken(match) {
       matchId: match.id,
     },
     SECRET_KEY,
-    { expiresIn: "72h" }
+    { expiresIn: "168h" }
   );
 }
-
-// TODO FinishedAt
 
 module.exports = {
   Mutation: {

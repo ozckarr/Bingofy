@@ -30,7 +30,6 @@ module.exports = {
         gameCode += possible.charAt(
           Math.floor(Math.random() * possible.length)
         );
-        //TODO: If match = await Match.find({ gameCode }), redo
       }
 
       const newMatch = new Match({

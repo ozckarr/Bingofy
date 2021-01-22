@@ -32,6 +32,7 @@ function JoinMatch() {
     },
     variables: values,
   });
+
   const onSubmit = (event) => {
     event.preventDefault();
     addPlayer();

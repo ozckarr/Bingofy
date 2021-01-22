@@ -8,6 +8,7 @@ import { Image } from "cloudinary-react";
 
 import { AuthContext } from "../context/auth";
 import { Redirect } from "react-router-dom";
+
 const {
   NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
   NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET,
@@ -18,23 +19,14 @@ function BingoView(props) {
   const [title, setTitle] = useState("");
   const [summery, setSummery] = useState("");
   const [cloudinaryId, setCloudinaryId] = useState("");
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+
   const [errors, setErrors] = useState({});
 
   const { user } = useContext(AuthContext);
 
   const onDrop = useCallback((acceptedFiles) => {
-    const url = `https://api.cloudinary.com/v1_1/${NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/upload`;
-    acceptedFiles.forEach(async (acceptedFile) => {
-      const formData = new FormData();
-      formData.append("file", acceptedFile);
-      formData.append("upload_preset", NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET);
-      const response = await fetch(url, {
-        method: "post",
-        body: formData,
-      });
-      const { public_id } = await response.json();
-      setCloudinaryId(public_id);
-    });
+    setUploadedFiles(acceptedFiles);
   }, []);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -48,12 +40,45 @@ function BingoView(props) {
     },
   });
 
-  //TODO: useForm / reset when submit {value={summery?}}
+  const [deleteBingoBox] = useMutation(DELETE_BINGOBOX_MUTATION, {
+    refetchQueries: [
+      {
+        query: FETCH_BINGO_QUERY,
+        variables: { bingoId },
+      },
+    ],
+    update() {},
+    onError(err) {
+      console.log(err);
+    },
+  });
+
+  const handleSubmit = () => {
+    if (uploadedFiles.length === 0) {
+      submitBox();
+    } else {
+      const url = `https://api.cloudinary.com/v1_1/${NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/upload`;
+      uploadedFiles.forEach(async (acceptedFile) => {
+        const formData = new FormData();
+        formData.append("file", acceptedFile);
+        formData.append("upload_preset", NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET);
+        const response = await fetch(url, {
+          method: "post",
+          body: formData,
+        });
+        const { public_id } = await response.json();
+        setCloudinaryId(public_id);
+        submitBox();
+      });
+    }
+  };
+
   const [submitBox] = useMutation(SUBMIT_BINGOBOX_MUTATION, {
     update() {
       setTitle("");
       setSummery("");
       setCloudinaryId("");
+      setUploadedFiles({});
     },
     variables: {
       bingoId,
@@ -61,15 +86,10 @@ function BingoView(props) {
       summery,
       cloudinaryId,
     },
-    onCompleted() {
-      setTitle("");
-      setSummery("");
-      setCloudinaryId("");
-    },
     onError(err) {
       console.log(err);
 
-      setErrors(err.graphQLErrors[0].extensions.exception.errors);
+      setErrors("något blev fel");
     },
   });
 
@@ -80,7 +100,7 @@ function BingoView(props) {
     if (loading) {
       bingoMarkup = <Loader />;
     } else {
-      const { title, username, bingoBoxes } = data.getBingo;
+      const { title: bingoTitle, username, bingoBoxes } = data.getBingo;
 
       if (username === user.username) {
         bingoMarkup = (
@@ -88,7 +108,7 @@ function BingoView(props) {
             <Card fluid>
               <Card.Content>
                 <Card.Header>
-                  <h3>{title}</h3>
+                  <h3>{bingoTitle}</h3>
                 </Card.Header>
                 <Card.Meta>
                   <p>
@@ -107,15 +127,17 @@ function BingoView(props) {
                       name={title}
                       error={errors.title ? true : false}
                       onChange={(event) => setTitle(event.target.value)}
+                      value={title}
                     />
                     <Form.TextArea
                       type="text"
                       placeholder="Summering"
                       name="summery"
                       onChange={(event) => setSummery(event.target.value)}
+                      value={summery}
                     />
 
-                    {cloudinaryId === "" ? (
+                    {uploadedFiles.length === 0 ? (
                       <div
                         {...getRootProps()}
                         className={`dropzone ${
@@ -126,13 +148,7 @@ function BingoView(props) {
                         Bild här (Valfritt)
                       </div>
                     ) : (
-                      <Image
-                        cloudName={`${NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}`}
-                        publicId={cloudinaryId}
-                        heighth="300"
-                        width="300"
-                        crop="scale"
-                      />
+                      <div className="dropzoneFull">Fullt...</div>
                     )}
 
                     {!(bingoBoxes.length > 24) ? (
@@ -144,7 +160,7 @@ function BingoView(props) {
                           icon="add"
                           color="orange"
                           disabled={title.trim() === ""}
-                          onClick={submitBox}
+                          onClick={handleSubmit}
                           circular
                         />
                       </>
@@ -174,6 +190,17 @@ function BingoView(props) {
                     <div className="bingoBoxContent">{bingoBox.title}</div>
                   </div>
                   <p style={{ marginLeft: "1em" }}>{bingoBox.summery}</p>
+                  <Button
+                    as="div"
+                    color="orange"
+                    onClick={() =>
+                      deleteBingoBox({
+                        variables: { bingoId, bingoBoxId: bingoBox.id },
+                      })
+                    }
+                    circular
+                    icon="trash"
+                  />
                 </Card.Content>
               ))}
             </Card>
@@ -225,6 +252,12 @@ const FETCH_BINGO_QUERY = gql`
         cloudinaryId
       }
     }
+  }
+`;
+
+const DELETE_BINGOBOX_MUTATION = gql`
+  mutation deleteBingoBox($bingoId: String!, $bingoBoxId: String!) {
+    deleteBingoBox(bingoId: $bingoId, bingoBoxId: $bingoBoxId)
   }
 `;
 
