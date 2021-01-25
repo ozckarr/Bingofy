@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import { Container, Button, Card } from "semantic-ui-react";
+import { Container, Button, Card, Image } from "semantic-ui-react";
+import logo from "../images/title-right.png";
 
 import JoinMatch from "../components/JoinMatch";
 import { AuthContext } from "../context/auth";
@@ -17,8 +18,10 @@ function Home(props) {
   console.log();
 
   return (
-    <div className="form-container">
+    <div className="size-container">
       <Container>
+        <Image src={logo} />
+
         {gameCode !== "" ? (
           <Card fluid>
             <Card.Content>
@@ -30,7 +33,7 @@ function Home(props) {
             </Card.Content>
           </Card>
         ) : (
-          <h1>Anslut till spel</h1>
+          <h3>Anslut till spel</h3>
         )}
         <JoinMatch />
         <hr />

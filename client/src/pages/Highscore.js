@@ -38,7 +38,7 @@ function Highscore() {
     getHighscore();
   };
   return (
-    <div className="form-container">
+    <div className="size-container">
       <Form onSubmit={onSubmit} noValidate className={loading ? "loading" : ""}>
         <h1>Hitta Highscore</h1>
         <Form.Input

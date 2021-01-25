@@ -33,7 +33,7 @@ function Register(props) {
   }
 
   return (
-    <div className="form-container">
+    <div className="size-container">
       <Form onSubmit={onSubmit} noValidate className={loading ? "loading" : ""}>
         <h1>Register</h1>
         <Form.Input
@@ -72,7 +72,7 @@ function Register(props) {
           error={errors.confirmPassword ? true : false}
           onChange={onChange}
         />
-        <Button type="submit" color="orange">
+        <Button type="submit" color="orange" fluid>
           <h4>Register</h4>
         </Button>
       </Form>

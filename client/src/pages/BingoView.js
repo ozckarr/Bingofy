@@ -78,7 +78,7 @@ function BingoView(props) {
       setTitle("");
       setSummery("");
       setCloudinaryId("");
-      setUploadedFiles({});
+      setUploadedFiles([]);
     },
     variables: {
       bingoId,
@@ -144,7 +144,7 @@ function BingoView(props) {
                           isDragActive && "dropzoneActive"
                         }`}
                       >
-                        <input {...getInputProps()} />
+                        <input {...getInputProps()} value={cloudinaryId} />
                         Bild här (Valfritt)
                       </div>
                     ) : (

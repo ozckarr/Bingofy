@@ -11,6 +11,7 @@ import {
   Card,
   Transition,
   Confirm,
+  Popup,
 } from "semantic-ui-react";
 
 import DeleteButton from "../components/DeleteButton";
@@ -71,7 +72,7 @@ function BingoList() {
   });
 
   return (
-    <div className="form-container">
+    <div className="size-container">
       <Transition.Group>
         <Button
           color="orange"
@@ -80,7 +81,7 @@ function BingoList() {
           to="/addBingo"
           style={{ marginBottom: "1em" }}
         >
-          <h4>Skapa ny</h4>
+          <h3>Skapa ny</h3>
         </Button>
         {loading ? (
           <Loader />
@@ -90,37 +91,63 @@ function BingoList() {
             (bingo) =>
               checkValues(bingo) && (
                 <Grid.Column key={bingo.id} style={{ marginBottom: "1em" }}>
-                  <Card fluid>
+                  <Card fluid color="orange">
                     <Card.Content>
-                      <Card.Header>{bingo.title}</Card.Header>
+                      <Card.Content>
+                        {!(bingo.bingoBoxes.length <= 24) && (
+                          <>
+                            <Button
+                              circular
+                              color="orange"
+                              icon="play"
+                              floated="right"
+                              onClick={() => handleClick(bingo)}
+                            />
+                            <Confirm
+                              open={selectedMatch.open}
+                              content={`Vill ni spela ${selectedMatch.title}?`}
+                              onCancel={() => setSelectedMatch({ open: false })}
+                              onConfirm={createMatch}
+                            />
+                          </>
+                        )}
+                        <Popup
+                          content={bingo.description}
+                          trigger={
+                            <Button
+                              icon="question"
+                              circular
+                              color="orange"
+                              floated="right"
+                            />
+                          }
+                          floated="right"
+                        />
+                      </Card.Content>
+                      <Card.Header style={{ marginTop: "0.16em" }}>
+                        {bingo.title}
+                      </Card.Header>
+
                       {username === bingo.username && (
                         <>
-                          <Button
-                            circular
-                            color="orange"
-                            icon="edit"
-                            as={Link}
-                            to={`/bingos/${bingo.id}`}
-                          />
-                          <DeleteButton bingoId={bingo.id} />
-                        </>
-                      )}
-                      {bingo.bingoBoxes.length <= 24 ? (
-                        <p>Inte klar...</p>
-                      ) : (
-                        <>
-                          <Button
-                            circular
-                            color="orange"
-                            icon="play"
-                            onClick={() => handleClick(bingo)}
-                          />
-                          <Confirm
-                            open={selectedMatch.open}
-                            content={`Vill ni spela ${selectedMatch.title}?`}
-                            onCancel={() => setSelectedMatch({ open: false })}
-                            onConfirm={createMatch}
-                          />
+                          <hr style={{ marginTop: "1em" }} />
+                          <Card.Content extra>
+                            <Card.Meta>
+                              {bingo.bingoBoxes.length <= 24 && (
+                                <p style={{ marginBottom: "0.5em" }}>
+                                  Inte klar...
+                                </p>
+                              )}
+                            </Card.Meta>
+                            <Button
+                              circular
+                              color="orange"
+                              icon="edit"
+                              as={Link}
+                              to={`/bingos/${bingo.id}`}
+                            />
+                            <DeleteButton bingoId={bingo.id} />
+                          </Card.Content>
                         </>
                       )}
                     </Card.Content>
