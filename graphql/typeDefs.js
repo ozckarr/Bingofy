@@ -67,7 +67,6 @@ module.exports = gql`
       summery: String
       cloudinaryId: String
     ): Bingo!
-
     checkBingoBox(
       matchId: String!
       playerId: String!

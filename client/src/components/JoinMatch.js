@@ -60,7 +60,7 @@ function JoinMatch() {
           onChange={onChange}
         ></Form.Input>
         <Button type="submit" color="orange" fluid>
-          Spela
+          <h4>Spela</h4>
         </Button>
       </Form>
       {Object.keys(errors).length > 0 && (

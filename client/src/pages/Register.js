@@ -73,7 +73,7 @@ function Register(props) {
           onChange={onChange}
         />
         <Button type="submit" color="orange">
-          Register
+          <h4>Register</h4>
         </Button>
       </Form>
       {Object.keys(errors).length > 0 && (

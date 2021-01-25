@@ -38,7 +38,7 @@ function Highscore() {
     getHighscore();
   };
   return (
-    <div>
+    <div className="form-container">
       <Form onSubmit={onSubmit} noValidate className={loading ? "loading" : ""}>
         <h1>Hitta Highscore</h1>
         <Form.Input
@@ -49,7 +49,9 @@ function Highscore() {
           value={values.gameCode}
           onChange={onChange}
         ></Form.Input>
-        <Button type="submit">Se Highscore</Button>
+        <Button type="submit" color="orange" fluid>
+          <h4>Se Highscore</h4>
+        </Button>
       </Form>
       {Object.keys(errors).length > 0 && (
         <div className="ui error message">

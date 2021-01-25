@@ -46,7 +46,7 @@ function VictoryCheck() {
           to={`/highscore/${matchId}`}
           onClick={leave}
         >
-          Avsluta och visa highscore
+          <h4>Avsluta och visa highscore</h4>
         </Button>
       )}
     </>

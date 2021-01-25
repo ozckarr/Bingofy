@@ -55,7 +55,7 @@ function AddBingo() {
           />
           <hr />
           <Button type="submit" color="orange">
-            Skapa Bingo
+            <h4>Skapa Bingo</h4>
           </Button>
         </Form.Field>
       </Form>

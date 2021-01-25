@@ -166,7 +166,7 @@ function BingoView(props) {
                       </>
                     ) : (
                       <Button color="orange" fluid as={Link} to={`/bingos/`}>
-                        Klar
+                        <h4>Klar</h4>
                       </Button>
                     )}
                   </Form>

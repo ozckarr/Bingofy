@@ -71,64 +71,66 @@ function BingoList() {
   });
 
   return (
-    <Transition.Group>
-      <Button
-        color="orange"
-        fluid
-        as={Link}
-        to="/addBingo"
-        style={{ marginBottom: "1em" }}
-      >
-        Skapa ny
-      </Button>
-      {loading ? (
-        <Loader />
-      ) : (
-        bingos &&
-        bingos.map(
-          (bingo) =>
-            checkValues(bingo) && (
-              <Grid.Column key={bingo.id} style={{ marginBottom: "1em" }}>
-                <Card fluid>
-                  <Card.Content>
-                    <Card.Header>{bingo.title}</Card.Header>
-                    {username === bingo.username && (
-                      <>
-                        <Button
-                          circular
-                          color="orange"
-                          icon="edit"
-                          as={Link}
-                          to={`/bingos/${bingo.id}`}
-                        />
-                        <DeleteButton bingoId={bingo.id} />
-                      </>
-                    )}
-                    {bingo.bingoBoxes.length <= 24 ? (
-                      <p>Inte klar...</p>
-                    ) : (
-                      <>
-                        <Button
-                          circular
-                          color="orange"
-                          icon="play"
-                          onClick={() => handleClick(bingo)}
-                        />
-                        <Confirm
-                          open={selectedMatch.open}
-                          content={`Vill ni spela ${selectedMatch.title}?`}
-                          onCancel={() => setSelectedMatch({ open: false })}
-                          onConfirm={createMatch}
-                        />
-                      </>
-                    )}
-                  </Card.Content>
-                </Card>
-              </Grid.Column>
-            )
-        )
-      )}
-    </Transition.Group>
+    <div className="form-container">
+      <Transition.Group>
+        <Button
+          color="orange"
+          fluid
+          as={Link}
+          to="/addBingo"
+          style={{ marginBottom: "1em" }}
+        >
+          <h4>Skapa ny</h4>
+        </Button>
+        {loading ? (
+          <Loader />
+        ) : (
+          bingos &&
+          bingos.map(
+            (bingo) =>
+              checkValues(bingo) && (
+                <Grid.Column key={bingo.id} style={{ marginBottom: "1em" }}>
+                  <Card fluid>
+                    <Card.Content>
+                      <Card.Header>{bingo.title}</Card.Header>
+                      {username === bingo.username && (
+                        <>
+                          <Button
+                            circular
+                            color="orange"
+                            icon="edit"
+                            as={Link}
+                            to={`/bingos/${bingo.id}`}
+                          />
+                          <DeleteButton bingoId={bingo.id} />
+                        </>
+                      )}
+                      {bingo.bingoBoxes.length <= 24 ? (
+                        <p>Inte klar...</p>
+                      ) : (
+                        <>
+                          <Button
+                            circular
+                            color="orange"
+                            icon="play"
+                            onClick={() => handleClick(bingo)}
+                          />
+                          <Confirm
+                            open={selectedMatch.open}
+                            content={`Vill ni spela ${selectedMatch.title}?`}
+                            onCancel={() => setSelectedMatch({ open: false })}
+                            onConfirm={createMatch}
+                          />
+                        </>
+                      )}
+                    </Card.Content>
+                  </Card>
+                </Grid.Column>
+              )
+          )
+        )}
+      </Transition.Group>
+    </div>
   );
 }
 

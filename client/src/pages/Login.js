@@ -53,7 +53,7 @@ function Login(props) {
           onChange={onChange}
         />
         <Button type="submit" color="orange">
-          Login
+          <h4>Login</h4>
         </Button>
       </Form>
       {Object.keys(errors).length > 0 && (
