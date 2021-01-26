@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import gql from "graphql-tag";
 import { useQuery } from "@apollo/client";
-import { Card, Icon, Container, Loader } from "semantic-ui-react";
+import { Card, Icon, Loader } from "semantic-ui-react";
 import rearrangeBingoBoxes from "../util/rearrangeBingoBoxes";
 
 import { Image } from "cloudinary-react";

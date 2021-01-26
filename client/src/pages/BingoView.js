@@ -209,13 +209,16 @@ function BingoView(props) {
                 </Card>
               </Card>
             </Container>
-            <div className="creatorBingoContainer">
+            <div
+              className="creatorBingoContainer"
+              style={{ maxWidth: "600px", margin: "auto" }}
+            >
               {bingoBoxes.map((bingoBox) => (
                 <React.Fragment key={bingoBox.id}>
                   {bingoBox.cloudinaryId === "" ? (
                     <div
                       className={
-                        selectedBox.title === bingoBox.title
+                        selectedBox.id === bingoBox.id
                           ? "selected creatorBingoBox"
                           : "creatorBingoBox"
                       }
@@ -231,7 +234,7 @@ function BingoView(props) {
                       width="auto"
                       crop="scale"
                       className={
-                        selectedBox.title === bingoBox.title
+                        selectedBox.id === bingoBox.id
                           ? "selected creatorBingoBox"
                           : "creatorBingoBox"
                       }
@@ -242,7 +245,7 @@ function BingoView(props) {
               ))}
             </div>
             {!(selectedBox.title === "") && (
-              <div style={{ margin: "1em 0" }}>
+              <div style={{ margin: "1em auto", maxWidth: "600px" }}>
                 <Card fluid>
                   <Card.Content>
                     <Card.Header>{selectedBox.title}</Card.Header>
