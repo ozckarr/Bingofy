@@ -37,7 +37,7 @@ function App() {
             <AuthRouteLoggedIn exact path="/addBingo" component={AddBingo} />
             <AuthRouteOnlyPlayer
               exact
-              path="/match/:bingoId"
+              path="/match/:matchId"
               component={MatchView}
             />
             <AuthRouteLoggedIn

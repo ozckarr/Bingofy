@@ -279,7 +279,8 @@ function BingoView(props) {
                             cloudName={`${NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}`}
                             publicId={selectedBox.cloudinaryId}
                             responsive
-                            crop="scale"
+                            height="250px"
+                            width="250px"
                           />
                         }
                         position="top right"

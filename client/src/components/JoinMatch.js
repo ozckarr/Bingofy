@@ -24,8 +24,8 @@ function JoinMatch() {
     update(_, { data: { joinMatch: playerData } }) {
       context.join(playerData);
     },
-    onCompleted({ joinMatch: { bingoId } }) {
-      history.push(`/match/${bingoId}`);
+    onCompleted({ joinMatch: { id } }) {
+      history.push(`/match/${id}`);
     },
     onError(err) {
       setErrors(err);
@@ -79,6 +79,7 @@ function JoinMatch() {
 const ADD_PLAYER = gql`
   mutation joinMatch($gameCode: String!, $nick: String!) {
     joinMatch(gameCode: $gameCode, nick: $nick) {
+      id
       token
       bingoId
       players {

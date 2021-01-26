@@ -140,34 +140,6 @@ div.header {
   }
 }
 
-.bingoBoxChecked {
-  position: relative;
-  background-image: url("../src/images/checked.png");
-  background-size: cover;
-  background-position: center;
-  height: 100%;
-  border: 0.1em solid black;
-}
-
-.bingoBoxUnChecked {
-  position: relative;
-  height: 100%;
-  height: 100;
-  border: 0.1em solid black;
-}
-
-.bingoBoxContent {
-  position: absolute;
-  height: 100%;
-  text-align: center;
-  width: 100%;
-}
-
-.selected .bingoBoxUnChecked,
-.selected .bingoBoxUnChecked {
-  outline: 0.3em solid #f2711c;
-}
-
 .dropzone {
   height: 8em;
   width: 100%;
@@ -193,4 +165,9 @@ div.header {
     #53321b 10px,
     #53321b 20px
   );
+}
+
+.summery {
+  width: 80%;
+  overflow-wrap: break-word;
 }

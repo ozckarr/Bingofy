@@ -1,24 +1,61 @@
 import React from "react";
-import { Button, Card } from "semantic-ui-react";
+import { Button, Popup, Card } from "semantic-ui-react";
+import { Image } from "cloudinary-react";
 
-function BingoBoxContent({ props: { id, title, summery, checked }, checkBox }) {
+const { NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME } = require("../util/config");
+
+function BingoBoxContent({
+  props: { id, title, summery, checked, cloudinaryId },
+  checkBox,
+}) {
   return (
     <Card.Content>
       {id === "" ? (
         <Card.Header>Klicka på en box för att komma igång.</Card.Header>
       ) : (
         <>
+          {!(cloudinaryId === "") && (
+            <Popup
+              trigger={
+                <Button
+                  as="div"
+                  color="orange"
+                  circular
+                  icon="zoom"
+                  floated="right"
+                  style={{ marginBottom: "0.5em" }}
+                />
+              }
+              content={
+                <Image
+                  cloudName={`${NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}`}
+                  publicId={cloudinaryId}
+                  responsive
+                  height="250px"
+                  width="250px"
+                />
+              }
+              position="top left"
+            />
+          )}
           <Card.Header>{title}</Card.Header>
-          <Card.Description>{summery}</Card.Description>
+          <div className="summery">{summery}</div>
           {checked ? (
             <Button
               circular
               color="orange"
               icon="window close outline"
               onClick={checkBox}
+              floated="right"
             />
           ) : (
-            <Button circular color="red" icon="expand" onClick={checkBox} />
+            <Button
+              circular
+              color="red"
+              icon="expand"
+              floated="right"
+              onClick={checkBox}
+            />
           )}
         </>
       )}
