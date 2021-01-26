@@ -22,8 +22,6 @@ function Highscore() {
       values.gameCode = "";
     },
     onCompleted({ getHighscore, getHighscore: { id } }) {
-      console.log(getHighscore);
-
       history.push(`/highscore/${id}`);
     },
     onError(err) {

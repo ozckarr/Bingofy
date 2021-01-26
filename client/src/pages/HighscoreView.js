@@ -37,7 +37,7 @@ function HighscoreView(props) {
   );
 
   let MarkUp;
-  if (loadingMatch || loadingBingo) {
+  if (loadingMatch && loadingBingo) {
     MarkUp = <Loader />;
   } else {
     let players = [];
@@ -104,7 +104,6 @@ function HighscoreView(props) {
                   <div className="highscoreBingoContainer">
                     {openData.newOrder.map((bingoBox) => (
                       <React.Fragment key={bingoBox.id}>
-                        {console.log(bingoBox)}
                         {bingoBox.cloudinaryId === "" ? (
                           <div className="highscoreBingoBox">
                             <p>{bingoBox.title}</p>

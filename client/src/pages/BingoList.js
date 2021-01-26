@@ -51,9 +51,6 @@ function BingoList() {
   };
 
   const [createMatch] = useMutation(CREATE_MATCH_MUTATION, {
-    update(data) {
-      console.log(data);
-    },
     onCompleted({ createMatch: { gameCode } }) {
       console.log(createMatch);
 
