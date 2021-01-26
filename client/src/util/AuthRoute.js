@@ -15,7 +15,7 @@ function AuthRoute({ component: Component, ...rest }) {
       }
     />
   ) : (
-    <Redirect to={`/match/${player.bingoId}`} />
+    <Redirect to={`/match/${player.matchId}`} />
   );
 }
 
@@ -31,7 +31,7 @@ function AuthRouteLoggedIn({ component: Component, ...rest }) {
       }
     />
   ) : (
-    <Redirect to={`/match/${player.bingoId}`} />
+    <Redirect to={`/match/${player.matchId}`} />
   );
 }
 

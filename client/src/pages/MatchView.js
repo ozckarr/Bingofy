@@ -14,13 +14,12 @@ import { Image } from "cloudinary-react";
 
 const { NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME } = require("../util/config");
 
-function MatchView() {
-  const {
-    player,
-    player: { matchId },
-  } = useContext(PlayerContext);
+function MatchView(props) {
+  const matchId = props.match.params.matchId;
 
-  const { data: match, loading: loadingMatch } = useQuery(FETCH_MATCH_QUERY, {
+  const { player } = useContext(PlayerContext);
+
+  const { loading: loadingMatch, data: match } = useQuery(FETCH_MATCH_QUERY, {
     variables: {
       matchId,
     },
@@ -29,7 +28,9 @@ function MatchView() {
     },
   });
 
-  const { data: bingo, loading: loadingBingo } = useQuery(
+  console.log(match);
+
+  const { loading: loadingBingo, data: bingo } = useQuery(
     FETCH_BINGO_WITH_GAMECODE_QUERY,
     {
       variables: {
@@ -40,6 +41,8 @@ function MatchView() {
       },
     }
   );
+
+  console.log(bingo);
 
   const [selectedBox, setSelectedBox] = useState({
     id: "",
@@ -75,9 +78,9 @@ function MatchView() {
   let bingoMarkup;
   if (!player) {
     bingoMarkup = <Redirect to="/" />;
-  } else if (loadingMatch || loadingBingo) {
+  } else if (loadingMatch) {
     bingoMarkup = <Loader />;
-  } else if (typeof bingo.getBingoWithGameCode == "u") {
+  } else if (loadingBingo) {
     bingoMarkup = <Loader />;
   } else {
     const { title, bingoBoxes } = bingo.getBingoWithGameCode;
@@ -85,9 +88,10 @@ function MatchView() {
     const playerInfo = match.getMatch.players.find(
       (x) => x.id === player.playerId
     );
-    let boxOrder = "";
-    boxOrder = rearrangeBingoBoxes(bingoBoxes, playerInfo);
-    if (boxOrder === "") {
+    console.log(playerInfo);
+
+    let boxOrder = rearrangeBingoBoxes(bingoBoxes, playerInfo);
+    if (typeof boxOrder === "undefined") {
       bingoMarkup = <Loader />;
     } else {
       bingoMarkup = (
