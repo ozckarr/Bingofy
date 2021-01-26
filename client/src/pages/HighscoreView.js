@@ -56,9 +56,16 @@ function HighscoreView(props) {
     });
     let bingoBoxes = bingo.getBingoWithGameCode.bingoBoxes;
     MarkUp = (
-      <Container>
+      <div style={{ maxWidth: "600px", margin: "auto" }}>
         {players.map((player, index) => (
-          <div key={player.id} style={{ marginBottom: "1em" }}>
+          <div
+            key={player.id}
+            style={
+              openData.index === index
+                ? { paddingBottom: "100%", marginBottom: "1em" }
+                : { marginBottom: "1em" }
+            }
+          >
             <Card
               fluid
               onClick={() =>
@@ -79,35 +86,50 @@ function HighscoreView(props) {
                   <Card.Meta>{player.finishedAt}</Card.Meta>
                 </Card.Header>
               </Card.Content>
+              {openData.index === index && (
+                <Card className="highscoreBingo" fluid>
+                  <div className="highscoreBingoOverlay">
+                    {openData.newOrder.map((bingoBox) => (
+                      <React.Fragment key={bingoBox.id}>
+                        {bingoBox.checked ? (
+                          <div className="highscoreBingoBoxOverlay checked"></div>
+                        ) : (
+                          <>
+                            <div className="highscoreBingoBoxOverlay"></div>
+                          </>
+                        )}
+                      </React.Fragment>
+                    ))}
+                  </div>
+                  <div className="highscoreBingoContainer">
+                    {openData.newOrder.map((bingoBox) => (
+                      <React.Fragment key={bingoBox.id}>
+                        {console.log(bingoBox)}
+                        {bingoBox.cloudinaryId === "" ? (
+                          <div className="highscoreBingoBox">
+                            <p>{bingoBox.title}</p>
+                          </div>
+                        ) : (
+                          <>
+                            <Image
+                              cloudName={`${NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}`}
+                              publicId={bingoBox.cloudinaryId}
+                              responsive
+                              width="auto"
+                              crop="scale"
+                              className="highscoreBingoBox"
+                            />
+                          </>
+                        )}
+                      </React.Fragment>
+                    ))}
+                  </div>
+                </Card>
+              )}
             </Card>
-            {openData.index === index && (
-              <div className="highscoreBingoContainer">
-                {openData.newOrder.map((bingoBox) => (
-                  <React.Fragment key={bingoBox.id}>
-                    {console.log(bingoBox)}
-                    {bingoBox.cloudinaryId === "" ? (
-                      <div className="highscoreBingoBox">
-                        <p>{bingoBox.title}</p>
-                      </div>
-                    ) : (
-                      <>
-                        <Image
-                          cloudName={`${NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}`}
-                          publicId={bingoBox.cloudinaryId}
-                          responsive
-                          width="auto"
-                          crop="scale"
-                          className="highscoreBingoBox"
-                        ></Image>
-                      </>
-                    )}
-                  </React.Fragment>
-                ))}
-              </div>
-            )}
           </div>
         ))}
-      </Container>
+      </div>
     );
   }
 
