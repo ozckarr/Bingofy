@@ -7,6 +7,7 @@ function rearrangeBingoBoxes(bingoBoxes, playerInfo) {
       ...playerInfo.boxOrder[i],
       title: bingoBoxes[i].title,
       summery: bingoBoxes[i].summery,
+      cloudinaryId: bingoBoxes[i].cloudinaryId,
     });
   }
 

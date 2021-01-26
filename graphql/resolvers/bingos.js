@@ -1,6 +1,8 @@
 const { AuthenticationError, UserInputError } = require("apollo-server");
 
 const Bingo = require("../../models/Bingo");
+const Match = require("../../models/Match");
+
 const checkAuth = require("../../util/check-auth");
 
 module.exports = {
@@ -18,6 +20,23 @@ module.exports = {
         const bingo = await Bingo.findById(bingoId);
         if (bingo) {
           return bingo;
+        } else {
+          throw new Error("Bingo not found");
+        }
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
+    async getBingoWithGameCode(_, { matchId }) {
+      try {
+        const match = await Match.findById(matchId);
+        if (match) {
+          const bingo = await Bingo.findById(match.bingoId);
+          if (bingo) {
+            return bingo;
+          } else {
+            throw new Error("Bingo not found");
+          }
         } else {
           throw new Error("Bingo not found");
         }

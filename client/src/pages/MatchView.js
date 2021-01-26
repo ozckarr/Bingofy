@@ -12,6 +12,7 @@ import VictoryCheck from "../components/VictoryCheck";
 
 function MatchView(props) {
   const bingoId = props.match.params.bingoId;
+
   const {
     player,
     player: { matchId },
@@ -72,9 +73,7 @@ function MatchView(props) {
   if (!player) {
     bingoMarkup = <Redirect to="/" />;
   } else {
-    if (loading) {
-      bingoMarkup = <Loader />;
-    } else if (matchLoading) {
+    if (loading || matchLoading) {
       bingoMarkup = <Loader />;
     } else {
       const { title, bingoBoxes } = bingo.data.getBingo;

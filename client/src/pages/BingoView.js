@@ -2,7 +2,14 @@ import React, { useCallback, useContext, useState } from "react";
 import gql from "graphql-tag";
 import { useQuery, useMutation } from "@apollo/client";
 import { useDropzone } from "react-dropzone";
-import { Button, Card, Form, Container, Loader } from "semantic-ui-react";
+import {
+  Button,
+  Card,
+  Form,
+  Popup,
+  Container,
+  Loader,
+} from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { Image } from "cloudinary-react";
 
@@ -20,6 +27,12 @@ function BingoView(props) {
   const [summery, setSummery] = useState("");
   const [cloudinaryId, setCloudinaryId] = useState("");
   const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [selectedBox, setSelectedBox] = useState({
+    cloudinaryId: "",
+    id: "",
+    summery: "",
+    title: "",
+  });
 
   const [errors, setErrors] = useState({});
 
@@ -40,6 +53,15 @@ function BingoView(props) {
     },
   });
 
+  const handleBoxClick = (bingoBox) => {
+    setSelectedBox({
+      id: bingoBox.id,
+      title: bingoBox.title,
+      summery: bingoBox.summery,
+      cloudinaryId: bingoBox.cloudinaryId,
+    });
+  };
+
   const [deleteBingoBox] = useMutation(DELETE_BINGOBOX_MUTATION, {
     refetchQueries: [
       {
@@ -47,7 +69,14 @@ function BingoView(props) {
         variables: { bingoId },
       },
     ],
-    update() {},
+    update() {
+      setSelectedBox({
+        cloudinaryId: "",
+        id: "",
+        summery: "",
+        title: "",
+      });
+    },
     onError(err) {
       console.log(err);
     },
@@ -104,107 +133,161 @@ function BingoView(props) {
 
       if (username === user.username) {
         bingoMarkup = (
-          <Container>
-            <Card fluid>
-              <Card.Content>
-                <Card.Header>
-                  <h3>{bingoTitle}</h3>
-                </Card.Header>
-                <Card.Meta>
-                  <p>
-                    Lägg till 25 brickor. Titeln är det som kommer att synas på
-                    bingobrickan. Summeringen kan ge en länge beskrivning.
-                  </p>
-                </Card.Meta>
-              </Card.Content>
-              <Card fluid>
+          <>
+            <Container>
+              <Card fluid style={{ marginBottom: "1em" }}>
                 <Card.Content>
-                  <Form>
-                    {/*TODO reset when new> */}
-                    <Form.Input
-                      type="text"
-                      placeholder="Titel"
-                      name={title}
-                      error={errors.title ? true : false}
-                      onChange={(event) => setTitle(event.target.value)}
-                      value={title}
-                    />
-                    <Form.TextArea
-                      type="text"
-                      placeholder="Summering"
-                      name="summery"
-                      onChange={(event) => setSummery(event.target.value)}
-                      value={summery}
-                    />
-
-                    {uploadedFiles.length === 0 ? (
-                      <div
-                        {...getRootProps()}
-                        className={`dropzone ${
-                          isDragActive && "dropzoneActive"
-                        }`}
-                      >
-                        <input {...getInputProps()} value={cloudinaryId} />
-                        Bild här (Valfritt)
-                      </div>
-                    ) : (
-                      <div className="dropzoneFull">Fullt...</div>
-                    )}
-
-                    {!(bingoBoxes.length > 24) ? (
-                      <>
-                        <p>{25 - bingoBoxes.length} Boxar kvar</p>
-
-                        <Button
-                          type="submit"
-                          icon="add"
-                          color="orange"
-                          disabled={title.trim() === ""}
-                          onClick={handleSubmit}
-                          circular
-                        />
-                      </>
-                    ) : (
-                      <Button color="orange" fluid as={Link} to={`/bingos/`}>
-                        <h4>Klar</h4>
-                      </Button>
-                    )}
-                  </Form>
+                  <Card.Header>
+                    <h3>{bingoTitle}</h3>
+                  </Card.Header>
+                  <Card.Meta>
+                    <p>
+                      Lägg till 25 brickor. Titeln är det som kommer att synas
+                      på bingobrickan. Summeringen kan ge en länge beskrivning.
+                    </p>
+                  </Card.Meta>
                 </Card.Content>
+                <Card fluid>
+                  <Card.Content>
+                    <Form>
+                      <Form.Input
+                        type="text"
+                        placeholder="Titel"
+                        name={title}
+                        error={errors.title ? true : false}
+                        onChange={(event) => setTitle(event.target.value)}
+                        value={title}
+                      />
+                      <Form.TextArea
+                        type="text"
+                        placeholder="Summering"
+                        name="summery"
+                        onChange={(event) => setSummery(event.target.value)}
+                        value={summery}
+                      />
+
+                      {uploadedFiles.length === 0 ? (
+                        <div
+                          {...getRootProps()}
+                          className={`dropzone ${
+                            isDragActive && "dropzoneActive"
+                          }`}
+                        >
+                          <input {...getInputProps()} value={cloudinaryId} />
+                          Bild här (Valfritt)
+                        </div>
+                      ) : (
+                        <div className="dropzoneFull">Fullt...</div>
+                      )}
+
+                      {!(bingoBoxes.length > 24) ? (
+                        <>
+                          <p>{25 - bingoBoxes.length} Boxar kvar</p>
+
+                          <Button
+                            type="submit"
+                            icon="add"
+                            color="orange"
+                            disabled={title.trim() === ""}
+                            onClick={handleSubmit}
+                            circular
+                          />
+                        </>
+                      ) : (
+                        <Button
+                          color="orange"
+                          style={{ marginTop: "1em" }}
+                          fluid
+                          as={Link}
+                          to={`/bingos/`}
+                        >
+                          <h4>Klar</h4>
+                        </Button>
+                      )}
+                    </Form>
+                  </Card.Content>
+                </Card>
               </Card>
+            </Container>
+            <div className="creatorBingoContainer">
               {bingoBoxes.map((bingoBox) => (
-                <Card.Content
-                  key={bingoBox.id}
-                  style={{ display: "flex", flexDirection: "row" }}
-                >
-                  {!(bingoBox.cloudinaryId === "") && (
+                <React.Fragment key={bingoBox.id}>
+                  {bingoBox.cloudinaryId === "" ? (
+                    <div
+                      className={
+                        selectedBox.title === bingoBox.title
+                          ? "selected creatorBingoBox"
+                          : "creatorBingoBox"
+                      }
+                      onClick={() => handleBoxClick(bingoBox)}
+                    >
+                      <p>{bingoBox.title}</p>
+                    </div>
+                  ) : (
                     <Image
                       cloudName={`${NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}`}
                       publicId={bingoBox.cloudinaryId}
-                      heighth="300"
-                      width="300"
+                      responsive
+                      width="auto"
                       crop="scale"
+                      className={
+                        selectedBox.title === bingoBox.title
+                          ? "selected creatorBingoBox"
+                          : "creatorBingoBox"
+                      }
+                      onClick={() => handleBoxClick(bingoBox)}
                     />
                   )}
-                  <div className="bingoBox">
-                    <div className="bingoBoxContent">{bingoBox.title}</div>
-                  </div>
-                  <p style={{ marginLeft: "1em" }}>{bingoBox.summery}</p>
-                  <Button
-                    as="div"
-                    color="orange"
-                    onClick={() =>
-                      deleteBingoBox({
-                        variables: { bingoId, bingoBoxId: bingoBox.id },
-                      })
-                    }
-                    circular
-                    icon="trash"
-                  />
-                </Card.Content>
+                </React.Fragment>
               ))}
-            </Card>
-          </Container>
+            </div>
+            {!(selectedBox.title === "") && (
+              <div style={{ margin: "1em 0" }}>
+                <Card fluid>
+                  <Card.Content>
+                    <Card.Header>{selectedBox.title}</Card.Header>
+                    <p>{selectedBox.summery}</p>
+                  </Card.Content>
+                  <Card.Content>
+                    <Button
+                      as="div"
+                      color="orange"
+                      onClick={() =>
+                        deleteBingoBox({
+                          variables: { bingoId, bingoBoxId: selectedBox.id },
+                        })
+                      }
+                      circular
+                      icon="trash"
+                    />
+                    {!(selectedBox.cloudinaryId === "") && (
+                      <Popup
+                        trigger={
+                          <Button
+                            as="div"
+                            color="orange"
+                            circular
+                            icon="zoom"
+                            floated="right"
+                          />
+                        }
+                        content={
+                          <Image
+                            cloudName={`${NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}`}
+                            publicId={selectedBox.cloudinaryId}
+                            responsive
+                            crop="scale"
+                          />
+                        }
+                        position="top right"
+                      />
+                    )}
+                  </Card.Content>
+                </Card>
+              </div>
+            )}
+            <div style={{ height: "1em" }}></div>
+          </>
         );
       }
     }

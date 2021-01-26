@@ -54,6 +54,7 @@ module.exports = gql`
   type Query {
     getBingos: [Bingo]
     getBingo(bingoId: ID!): Bingo
+    getBingoWithGameCode(matchId: String!): Bingo
     getMatch(matchId: ID!): Match
   }
   type Mutation {
