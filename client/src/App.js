@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import { Container } from "semantic-ui-react";
 
 import "semantic-ui-css/semantic.min.css";
@@ -23,39 +23,32 @@ import MatchView from "./pages/MatchView";
 import Highscore from "./pages/Highscore";
 import HighscoreView from "./pages/HighscoreView";
 import BingoList from "./pages/BingoList";
-import NotFound from "./pages/NotFound";
 
 function App() {
   return (
     <AuthProvider>
       <PlayerProvider>
         <Router>
-          <Switch>
-            <Container>
-              <MenuBar />
-              <Route exact path="/" component={Home} />
-              <AuthRoute exact path="/login" component={Login} />
-              <AuthRoute exact path="/register" component={Register} />
-              <AuthRouteLoggedIn exact path="/addBingo" component={AddBingo} />
-              <AuthRouteOnlyPlayer
-                exact
-                path="/match/:matchId"
-                component={MatchView}
-              />
-              <AuthRouteLoggedIn
-                exact
-                path="/bingos/:bingoId"
-                component={BingoView}
-              />
-              <Route exact path="/highscore" component={Highscore} />
-              <Route
-                exact
-                path="/highscore/:matchId"
-                component={HighscoreView}
-              />
-              <AuthRouteLoggedIn exact path="/bingos" component={BingoList} />
-            </Container>
-          </Switch>
+          <Container>
+            <MenuBar />
+            <Route exact path="/" component={Home} />
+            <AuthRoute exact path="/login" component={Login} />
+            <AuthRoute exact path="/register" component={Register} />
+            <AuthRouteLoggedIn exact path="/addBingo" component={AddBingo} />
+            <AuthRouteOnlyPlayer
+              exact
+              path="/match/:matchId"
+              component={MatchView}
+            />
+            <AuthRouteLoggedIn
+              exact
+              path="/bingos/:bingoId"
+              component={BingoView}
+            />
+            <Route exact path="/highscore" component={Highscore} />
+            <Route exact path="/highscore/:matchId" component={HighscoreView} />
+            <AuthRouteLoggedIn exact path="/bingos" component={BingoList} />
+          </Container>
         </Router>
       </PlayerProvider>
     </AuthProvider>

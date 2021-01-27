@@ -80,6 +80,7 @@ function BingoList() {
         >
           <h3>Skapa ny</h3>
         </Button>
+
         {loading ? (
           <Loader />
         ) : (
