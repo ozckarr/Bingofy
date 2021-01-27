@@ -37,16 +37,17 @@ function HighscoreView(props) {
   );
 
   let MarkUp;
-  if (loadingMatch && loadingBingo) {
+  if (loadingMatch || loadingBingo) {
     MarkUp = <Loader />;
   } else {
+    // Removes players that are not done
     let players = [];
     for (let i = 0; i < match.getMatch.players.length; i++) {
       if (!(match.getMatch.players[i].finishedAt === "")) {
         players.push(match.getMatch.players[i]);
       }
     }
-
+    // Sorts player after finishedAt
     players.sort(function (a, b) {
       return a.finishedAt < b.finishedAt
         ? -1
@@ -54,82 +55,93 @@ function HighscoreView(props) {
         ? 1
         : 0;
     });
+
     let bingoBoxes = bingo.getBingoWithGameCode.bingoBoxes;
-    MarkUp = (
-      <div style={{ maxWidth: "600px", margin: "auto" }}>
-        {players.map((player, index) => (
-          <div
-            key={player.id}
-            style={
-              openData.index === index
-                ? { paddingBottom: "100%", marginBottom: "1em" }
-                : { marginBottom: "1em" }
-            }
-          >
-            <Card
-              fluid
-              onClick={() =>
-                setOpenData({
-                  index,
-                  newOrder: rearrangeBingoBoxes(bingoBoxes, player),
-                })
+    if (players.length === 0) {
+      MarkUp = (
+        <Card>
+          <Card.Content>
+            <Card.Header>Ingen har vunnit ännu</Card.Header>
+          </Card.Content>
+        </Card>
+      );
+    } else {
+      MarkUp = (
+        <div style={{ maxWidth: "600px", margin: "auto" }}>
+          {players.map((player, index) => (
+            <div
+              key={player.id}
+              style={
+                openData.index === index
+                  ? { paddingBottom: "100%", marginBottom: "1em" }
+                  : { marginBottom: "1em" }
               }
             >
-              <Card.Content>
-                <Card.Header>
-                  {openData.index === index ? (
-                    <Icon name="angle down" size="large" floated="right" />
-                  ) : (
-                    <Icon name="angle up" size="large" floated="right" />
-                  )}
-                  {index + 1 + ". " + player.nick}
-                  <Card.Meta>{player.finishedAt}</Card.Meta>
-                </Card.Header>
-              </Card.Content>
-              {openData.index === index && (
-                <Card className="highscoreBingo" fluid>
-                  <div className="highscoreBingoOverlay">
-                    {openData.newOrder.map((bingoBox) => (
-                      <React.Fragment key={bingoBox.id}>
-                        {bingoBox.checked ? (
-                          <div className="highscoreBingoBoxOverlay checked"></div>
-                        ) : (
-                          <>
-                            <div className="highscoreBingoBoxOverlay"></div>
-                          </>
-                        )}
-                      </React.Fragment>
-                    ))}
-                  </div>
-                  <div className="highscoreBingoContainer">
-                    {openData.newOrder.map((bingoBox) => (
-                      <React.Fragment key={bingoBox.id}>
-                        {bingoBox.cloudinaryId === "" ? (
-                          <div className="highscoreBingoBox">
-                            <p>{bingoBox.title}</p>
-                          </div>
-                        ) : (
-                          <>
-                            <Image
-                              cloudName={`${NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}`}
-                              publicId={bingoBox.cloudinaryId}
-                              responsive
-                              width="auto"
-                              crop="scale"
-                              className="highscoreBingoBox"
-                            />
-                          </>
-                        )}
-                      </React.Fragment>
-                    ))}
-                  </div>
-                </Card>
-              )}
-            </Card>
-          </div>
-        ))}
-      </div>
-    );
+              <Card
+                fluid
+                onClick={() =>
+                  setOpenData({
+                    index,
+                    newOrder: rearrangeBingoBoxes(bingoBoxes, player),
+                  })
+                }
+              >
+                <Card.Content>
+                  <Card.Header>
+                    {openData.index === index ? (
+                      <Icon name="angle down" size="large" floated="right" />
+                    ) : (
+                      <Icon name="angle up" size="large" floated="right" />
+                    )}
+                    {index + 1 + ". " + player.nick}
+                    <Card.Meta>{player.finishedAt}</Card.Meta>
+                  </Card.Header>
+                </Card.Content>
+                {openData.index === index && (
+                  <Card className="highscoreBingo" fluid>
+                    <div className="highscoreBingoOverlay">
+                      {openData.newOrder.map((bingoBox) => (
+                        <React.Fragment key={bingoBox.id}>
+                          {bingoBox.checked ? (
+                            <div className="highscoreBingoBoxOverlay checked"></div>
+                          ) : (
+                            <>
+                              <div className="highscoreBingoBoxOverlay"></div>
+                            </>
+                          )}
+                        </React.Fragment>
+                      ))}
+                    </div>
+                    <div className="highscoreBingoContainer">
+                      {openData.newOrder.map((bingoBox) => (
+                        <React.Fragment key={bingoBox.id}>
+                          {bingoBox.cloudinaryId === "" ? (
+                            <div className="highscoreBingoBox">
+                              <p>{bingoBox.title}</p>
+                            </div>
+                          ) : (
+                            <>
+                              <Image
+                                cloudName={`${NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}`}
+                                publicId={bingoBox.cloudinaryId}
+                                responsive
+                                width="auto"
+                                crop="scale"
+                                className="highscoreBingoBox"
+                              />
+                            </>
+                          )}
+                        </React.Fragment>
+                      ))}
+                    </div>
+                  </Card>
+                )}
+              </Card>
+            </div>
+          ))}
+        </div>
+      );
+    }
   }
 
   return MarkUp;

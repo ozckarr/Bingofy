@@ -26,7 +26,6 @@ function Highscore() {
     },
     onError(err) {
       console.log(err);
-      // TODO Fixa backend check
       setErrors(true);
     },
   });

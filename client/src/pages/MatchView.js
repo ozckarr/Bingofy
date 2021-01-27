@@ -101,6 +101,8 @@ function MatchView(props) {
 
     let boxOrder = rearrangeBingoBoxes(bingoBoxes, playerInfo);
 
+    // If rearrangeBingoBoxes returns noBoxOrder, some data is lost after joinMatch,
+    // The "ready?" button hides this, and refetches.
     if (boxOrder === "noBoxOrder") {
       bingoMarkup = (
         <Card style={{ marginTop: "3em" }} color="orange">

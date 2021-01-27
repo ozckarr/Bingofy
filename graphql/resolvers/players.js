@@ -3,7 +3,6 @@ const jwt = require("jsonwebtoken");
 const { UserInputError } = require("apollo-server");
 
 const { validatePlayerInput } = require("../../util/validatiors");
-const { SECRET_KEY } = require("../../config");
 const Match = require("../../models/Match");
 
 function generateToken(match) {
@@ -14,7 +13,7 @@ function generateToken(match) {
       bingoId: match.bingoId,
       matchId: match.id,
     },
-    SECRET_KEY,
+    process.env.SECRET_KEY,
     { expiresIn: "168h" }
   );
 }

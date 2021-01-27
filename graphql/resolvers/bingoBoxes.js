@@ -3,7 +3,7 @@ const { UserInputError } = require("apollo-server");
 const checkAuth = require("../../util/check-auth");
 const Bingo = require("../../models/Bingo");
 
-// Check Bingobox is in matches.js
+// CheckBingobox() is in matches.js
 module.exports = {
   Mutation: {
     createBingoBox: async (_, { bingoId, title, summery, cloudinaryId }) => {

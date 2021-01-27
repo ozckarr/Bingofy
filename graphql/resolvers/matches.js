@@ -22,6 +22,7 @@ module.exports = {
     async createMatch(_, { bingoId, bingoName }, context) {
       const user = checkAuth(context);
 
+      //creates randomized code
       var gameCode = "";
       var possible =
         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";

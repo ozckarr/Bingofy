@@ -10,12 +10,12 @@ function Home(props) {
   const { user } = useContext(AuthContext);
   let gameCode;
 
+  // Reavels the gameCode if there is any
   if (typeof props.location.state === "undefined") {
     gameCode = "";
   } else {
     gameCode = props.location.state.detail;
   }
-  console.log();
 
   return (
     <div className="size-container">
