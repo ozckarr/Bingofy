@@ -9,6 +9,7 @@ import {
   Loader,
   Button,
   Card,
+  Icon,
   Transition,
   Confirm,
   Popup,
@@ -29,9 +30,12 @@ function BingoList() {
   });
   let history = useHistory();
 
-  const { loading, data: { getBingos: bingos } = {} } = useQuery(
-    FETCH_BINGOS_QUERY
-  );
+  const {
+    loading,
+    data: { getBingos: bingos } = {},
+    refetch,
+    networkStatus,
+  } = useQuery(FETCH_BINGOS_QUERY);
 
   const checkValues = (bingo) => {
     // Doesn't render for non-owners i it isn't done
@@ -51,6 +55,9 @@ function BingoList() {
   };
 
   const [createMatch] = useMutation(CREATE_MATCH_MUTATION, {
+    update(data) {
+      console.log(data);
+    },
     onCompleted({ createMatch: { gameCode } }) {
       console.log(createMatch);
 
@@ -80,8 +87,16 @@ function BingoList() {
         >
           <h3>Skapa ny</h3>
         </Button>
-
-        {loading ? (
+        <Button
+          color="orange"
+          fluid
+          basic
+          style={{ marginBottom: "3em" }}
+          onClick={() => refetch()}
+        >
+          <Icon name="refresh" />
+        </Button>
+        {loading || networkStatus === 4 ? (
           <Loader />
         ) : (
           bingos &&
