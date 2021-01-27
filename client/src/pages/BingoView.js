@@ -17,9 +17,9 @@ import { AuthContext } from "../context/auth";
 import { Redirect } from "react-router-dom";
 
 const {
-  NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-  NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET,
-} = require("../util/config");
+  REACT_APP_CLOUDINARY_CLOUD_NAME,
+  REACT_APP_CLOUDINARY_UPLOAD_PRESET,
+} = process.env;
 
 function BingoView(props) {
   const bingoId = props.match.params.bingoId;
@@ -86,11 +86,11 @@ function BingoView(props) {
     if (uploadedFiles.length === 0) {
       submitBox();
     } else {
-      const url = `https://api.cloudinary.com/v1_1/${NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/upload`;
+      const url = `https://api.cloudinary.com/v1_1/${REACT_APP_CLOUDINARY_CLOUD_NAME}/upload`;
       uploadedFiles.forEach(async (acceptedFile) => {
         const formData = new FormData();
         formData.append("file", acceptedFile);
-        formData.append("upload_preset", NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET);
+        formData.append("upload_preset", REACT_APP_CLOUDINARY_UPLOAD_PRESET);
         const response = await fetch(url, {
           method: "post",
           body: formData,
@@ -238,7 +238,7 @@ function BingoView(props) {
                     </div>
                   ) : (
                     <Image
-                      cloudName={`${NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}`}
+                      cloudName={`${REACT_APP_CLOUDINARY_CLOUD_NAME}`}
                       publicId={bingoBox.cloudinaryId}
                       responsive
                       width="auto"
@@ -286,7 +286,7 @@ function BingoView(props) {
                         }
                         content={
                           <Image
-                            cloudName={`${NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}`}
+                            cloudName={`${REACT_APP_CLOUDINARY_CLOUD_NAME}`}
                             publicId={selectedBox.cloudinaryId}
                             responsive
                             height="250px"

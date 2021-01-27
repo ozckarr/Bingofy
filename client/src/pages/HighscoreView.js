@@ -6,7 +6,7 @@ import rearrangeBingoBoxes from "../util/rearrangeBingoBoxes";
 
 import { Image } from "cloudinary-react";
 
-const { NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME } = require("../util/config");
+const { REACT_APP_CLOUDINARY_CLOUD_NAME } = process.env;
 
 function HighscoreView(props) {
   const matchId = props.match.params.matchId;
@@ -98,36 +98,36 @@ function HighscoreView(props) {
                   </Card.Header>
                 </Card.Content>
                 {openData.index === index && (
-                  <Card className="highscoreBingo" fluid>
-                    <div className="highscoreBingoOverlay">
+                  <Card className="layOutBingo" fluid>
+                    <div className="layOutBingoOverlay">
                       {openData.newOrder.map((bingoBox) => (
                         <React.Fragment key={bingoBox.id}>
                           {bingoBox.checked ? (
-                            <div className="highscoreBingoBoxOverlay checked"></div>
+                            <div className="layOutBingoBoxOverlay checked"></div>
                           ) : (
                             <>
-                              <div className="highscoreBingoBoxOverlay"></div>
+                              <div className="layOutBingoBoxOverlay"></div>
                             </>
                           )}
                         </React.Fragment>
                       ))}
                     </div>
-                    <div className="highscoreBingoContainer">
+                    <div className="layOutBingoContainer">
                       {openData.newOrder.map((bingoBox) => (
                         <React.Fragment key={bingoBox.id}>
                           {bingoBox.cloudinaryId === "" ? (
-                            <div className="highscoreBingoBox">
+                            <div className="layOutBingoBox">
                               <p>{bingoBox.title}</p>
                             </div>
                           ) : (
                             <>
                               <Image
-                                cloudName={`${NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}`}
+                                cloudName={`${REACT_APP_CLOUDINARY_CLOUD_NAME}`}
                                 publicId={bingoBox.cloudinaryId}
                                 responsive
                                 width="auto"
                                 crop="scale"
-                                className="highscoreBingoBox"
+                                className="layOutBingoBox"
                               />
                             </>
                           )}

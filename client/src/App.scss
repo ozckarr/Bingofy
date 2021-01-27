@@ -73,12 +73,12 @@ div.header {
   }
 }
 
-//bingo Highscore
-.highscoreBingo {
+//bingo Layout
+.layOutBingo {
   position: relative;
   width: 100%;
 }
-.highscoreBingoContainer {
+.layOutBingoContainer {
   z-index: -10;
   position: absolute;
   display: flex;
@@ -86,7 +86,7 @@ div.header {
   flex-wrap: wrap;
   width: 100%;
   outline: 0.1em solid black;
-  .highscoreBingoBox {
+  .layOutBingoBox {
     position: relative;
     width: 20%;
     outline: 0.1em solid black;
@@ -102,7 +102,7 @@ div.header {
     }
   }
 
-  .highscoreBingoBox:after {
+  .layOutBingoBox:after {
     content: "";
     display: block;
     padding-bottom: 100%;
@@ -113,22 +113,22 @@ div.header {
     }
   }
 }
-.highscoreBingoOverlay {
+.layOutBingoOverlay {
   position: absolute;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   width: 100%;
-  .highscoreBingoBoxOverlay {
+  .layOutBingoBoxOverlay {
     position: relative;
     width: 20%;
   }
-  .highscoreBingoBoxOverlay.checked {
+  .layOutBingoBoxOverlay.checked {
     background-image: url("../src/images/checked.png");
     background-size: cover;
     background-position: center;
   }
-  .highscoreBingoBoxOverlay:after {
+  .layOutBingoBoxOverlay:after {
     content: "";
     display: block;
     padding-bottom: 100%;

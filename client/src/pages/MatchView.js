@@ -14,7 +14,7 @@ import VictoryCheck from "../components/VictoryCheck";
 
 import { Image } from "cloudinary-react";
 
-const { NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME } = require("../util/config");
+const { REACT_APP_CLOUDINARY_CLOUD_NAME } = process.env;
 
 function MatchView(props) {
   const matchId = props.match.params.matchId;
@@ -126,19 +126,19 @@ function MatchView(props) {
             </Card.Header>
           </Card.Content>
           <div style={{ paddingBottom: "100%" }}>
-            <Card className="highscoreBingo" fluid>
-              <div className="highscoreBingoOverlay">
+            <Card className="layOutBingo" fluid>
+              <div className="layOutBingoOverlay">
                 {boxOrder.map((bingoBox) => (
                   <React.Fragment key={bingoBox.id}>
                     {bingoBox.checked ? (
                       <div
-                        className="highscoreBingoBoxOverlay checked"
+                        className="layOutBingoBoxOverlay checked"
                         onClick={() => handleBoxClick(bingoBox)}
                       ></div>
                     ) : (
                       <>
                         <div
-                          className="highscoreBingoBoxOverlay"
+                          className="layOutBingoBoxOverlay"
                           onClick={() => handleBoxClick(bingoBox)}
                         ></div>
                       </>
@@ -146,22 +146,22 @@ function MatchView(props) {
                   </React.Fragment>
                 ))}
               </div>
-              <div className="highscoreBingoContainer">
+              <div className="layOutBingoContainer">
                 {boxOrder.map((bingoBox) => (
                   <React.Fragment key={bingoBox.id}>
                     {bingoBox.cloudinaryId === "" ? (
-                      <div className="highscoreBingoBox">
+                      <div className="layOutBingoBox">
                         <p>{bingoBox.title}</p>
                       </div>
                     ) : (
                       <>
                         <Image
-                          cloudName={`${NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}`}
+                          cloudName={`${REACT_APP_CLOUDINARY_CLOUD_NAME}`}
                           publicId={bingoBox.cloudinaryId}
                           responsive
                           width="auto"
                           crop="scale"
-                          className="highscoreBingoBox"
+                          className="layOutBingoBox"
                         />
                       </>
                     )}
