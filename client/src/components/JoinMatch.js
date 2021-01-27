@@ -28,7 +28,7 @@ function JoinMatch() {
       history.push(`/match/${id}`);
     },
     onError(err) {
-      setErrors(err);
+      setErrors(err.graphQLErrors[0].extensions.exception.errors);
     },
     variables: values,
   });

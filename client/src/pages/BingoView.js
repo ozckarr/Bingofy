@@ -62,7 +62,7 @@ function BingoView(props) {
     });
   };
 
-  const [deleteBingoBox] = useMutation(DELETE_BINGOBOX_MUTATION, {
+  const [deleteBingoBox, { error }] = useMutation(DELETE_BINGOBOX_MUTATION, {
     refetchQueries: [
       {
         query: FETCH_BINGO_QUERY,
@@ -205,6 +205,16 @@ function BingoView(props) {
                         </Button>
                       )}
                     </Form>
+                    {error && (
+                      <div
+                        className="ui error message"
+                        style={{ marginBottom: 20 }}
+                      >
+                        <ul className="list">
+                          <li>{error.graphQLErrors[0].message}</li>
+                        </ul>
+                      </div>
+                    )}
                   </Card.Content>
                 </Card>
               </Card>

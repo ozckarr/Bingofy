@@ -55,10 +55,10 @@ module.exports.validatePlayerInput = (gameCode, nick) => {
 module.exports.validateLoginInput = (username, password) => {
   const errors = {};
   if (username.trim() === "") {
-    errors.username = "Username must not be empty";
+    errors.username = "Lösenordet nåste fyllas i.";
   }
   if (password.trim() === "") {
-    errors.password = "Password must not be empty";
+    errors.password = "Lösenordet nåste fyllas i.";
   }
 
   return {
