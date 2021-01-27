@@ -1,7 +1,9 @@
+import jwtDecode from "jwt-decode";
+
 import React, { useContext, useState } from "react";
 import gql from "graphql-tag";
 import { useQuery, useMutation } from "@apollo/client";
-import { Card, Loader } from "semantic-ui-react";
+import { Card, Button, Loader } from "semantic-ui-react";
 
 import { PlayerContext } from "../context/playerAuth";
 import rearrangeBingoBoxes from "../util/rearrangeBingoBoxes";
@@ -17,9 +19,21 @@ const { NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME } = require("../util/config");
 function MatchView(props) {
   const matchId = props.match.params.matchId;
 
-  const { player } = useContext(PlayerContext);
+  let { player } = useContext(PlayerContext);
+  if (player.token) {
+    let playerData = jwtDecode(player.token);
 
-  const { loading: loadingMatch, data: match } = useQuery(FETCH_MATCH_QUERY, {
+    player = {
+      playerId: playerData.playerId,
+    };
+  }
+
+  const {
+    loading: loadingMatch,
+    data: match,
+    refetch,
+    networkStatus,
+  } = useQuery(FETCH_MATCH_QUERY, {
     variables: {
       matchId,
     },
@@ -27,8 +41,6 @@ function MatchView(props) {
       console.log(err);
     },
   });
-
-  console.log(match);
 
   const { loading: loadingBingo, data: bingo } = useQuery(
     FETCH_BINGO_WITH_GAMECODE_QUERY,
@@ -41,8 +53,6 @@ function MatchView(props) {
       },
     }
   );
-
-  console.log(bingo);
 
   const [selectedBox, setSelectedBox] = useState({
     id: "",
@@ -78,7 +88,7 @@ function MatchView(props) {
   let bingoMarkup;
   if (!player) {
     bingoMarkup = <Redirect to="/" />;
-  } else if (loadingMatch) {
+  } else if (loadingMatch || networkStatus === 4) {
     bingoMarkup = <Loader />;
   } else if (loadingBingo) {
     bingoMarkup = <Loader />;
@@ -88,11 +98,22 @@ function MatchView(props) {
     const playerInfo = match.getMatch.players.find(
       (x) => x.id === player.playerId
     );
-    console.log(playerInfo);
 
     let boxOrder = rearrangeBingoBoxes(bingoBoxes, playerInfo);
-    if (typeof boxOrder === "undefined") {
-      bingoMarkup = <Loader />;
+
+    if (boxOrder === "noBoxOrder") {
+      bingoMarkup = (
+        <Card style={{ marginTop: "3em" }} color="orange">
+          <Button
+            color="orange"
+            fluid
+            style={{ margin: "5em auto ", width: "15em" }}
+            onClick={() => refetch()}
+          >
+            Redo?
+          </Button>
+        </Card>
+      );
     } else {
       bingoMarkup = (
         <div style={{ maxWidth: "600px", margin: "auto" }}>

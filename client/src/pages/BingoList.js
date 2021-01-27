@@ -91,7 +91,7 @@ function BingoList() {
           color="orange"
           fluid
           basic
-          style={{ marginBottom: "3em" }}
+          style={{ marginBottom: "2em" }}
           onClick={() => refetch()}
         >
           <Icon name="refresh" />

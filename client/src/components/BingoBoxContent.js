@@ -39,7 +39,9 @@ function BingoBoxContent({
             />
           )}
           <Card.Header>{title}</Card.Header>
-          <div className="summery">{summery}</div>
+          <div className="summery">
+            <p style={{ minHeight: "2em" }}>{summery}</p>
+          </div>
           {checked ? (
             <Button
               circular

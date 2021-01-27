@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Menu, Image, Confirm } from "semantic-ui-react";
+import { Menu, Image } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
 import { AuthContext } from "../context/auth";
@@ -9,7 +9,6 @@ import logo from "../images/title-left.png";
 function MenuBar() {
   const { user, logout } = useContext(AuthContext);
   const { player, leave } = useContext(PlayerContext);
-  const [confirmOpen, setConfirmOpen] = useState(false);
 
   const pathname = window.location.pathname;
 
@@ -22,14 +21,8 @@ function MenuBar() {
     MenuBar = (
       <Menu secondary size="massive" color="orange">
         <Menu.Menu position="right">
-          <Menu.Item icon="x" onClick={() => setConfirmOpen(true)} active />
+          <Menu.Item icon="x" onClick={leave} active />
         </Menu.Menu>
-        <Confirm
-          open={confirmOpen}
-          content="Är du säker? Du kommer inte kunna att fortsätta med denna bricka."
-          onCancel={() => setConfirmOpen(false)}
-          onConfirm={leave}
-        />
       </Menu>
     );
   } else if (user) {
